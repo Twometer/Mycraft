@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Mycraft.iOS">
+      <UniqueIdentifier>{2bc45812-f4f6-44e8-b122-069bb4220246}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mycraft.iOS\Images.xcassets">
+      <UniqueIdentifier>{eddc1fbb-fdb0-4336-8580-936b1c49beec}</UniqueIdentifier>
+      <Extensions>Mycraft.iOS\Images.xcassets\*</Extensions>
+    </Filter>
+    <Filter Include="Mycraft.iOS\Images.xcassets\AppIcon.appiconset">
+      <UniqueIdentifier>{0154a00f-c906-439a-bdf3-a8cf44c6053b}</UniqueIdentifier>
+      <Extensions>Mycraft.iOS\Images.xcassets\AppIcon.appiconset\*</Extensions>
+    </Filter>
+    <Filter Include="Mycraft.iOS\Supporting Files">
+      <UniqueIdentifier>{785663ae-1740-48ee-bfe7-816cffbedf57}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Mycraft.iOS\AppDelegate.m">
+      <Filter>Mycraft.iOS</Filter>
+    </ClCompile>
+    <ClCompile Include="Mycraft.iOS\GameViewController.m">
+      <Filter>Mycraft.iOS</Filter>
+    </ClCompile>
+    <ClCompile Include="Mycraft.iOS\main.m">
+      <Filter>Mycraft.iOS\Supporting Files</Filter>
+    </ClCompile>
+    <ClInclude Include="Mycraft.iOS\AppDelegate.h">
+      <Filter>Mycraft.iOS</Filter>
+    </ClInclude>
+    <ClInclude Include="Mycraft.iOS\GameViewController.h">
+      <Filter>Mycraft.iOS</Filter>
+    </ClInclude>
+    <Content Include="Mycraft.iOS\Base.lproj\Main.storyboard">
+      <Filter>Mycraft.iOS</Filter>
+    </Content>
+    <Content Include="Mycraft.iOS\Images.xcassets\AppIcon.appiconset\Contents.json">
+      <Filter>Mycraft.iOS\Images.xcassets\AppIcon.appiconset</Filter>
+    </Content>
+    <InfoPlist Include="Mycraft.iOS\Info.plist">
+      <Filter>Mycraft.iOS\Supporting Files</Filter>
+    </InfoPlist>
+  </ItemGroup>
+</Project>
