@@ -13,5 +13,6 @@ void Cube_tearDownGL();
 void Cube_update();
 void Cube_prepare();
 void Cube_draw();
+GLuint Cube_loadShaders(const char* vertex, const char* fragment);
 
 #endif /* defined(__HelloCubeNative__main__) */
