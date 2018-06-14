@@ -13,3 +13,13 @@ Java_de_twometer_mycraft_MainActivity_stringFromJNI(
     hello += std::string(chr);
     return env->NewStringUTF(hello.c_str());
 }
+extern "C"
+JNIEXPORT void JNICALL
+Java_de_twometer_mycraft_MainActivity_onPacket(JNIEnv *env, jobject instance, jint id,
+                                               jbyteArray packet_) {
+    jbyte *packet = env->GetByteArrayElements(packet_, NULL);
+
+    // TODO
+
+    env->ReleaseByteArrayElements(packet_, packet, 0);
+}
