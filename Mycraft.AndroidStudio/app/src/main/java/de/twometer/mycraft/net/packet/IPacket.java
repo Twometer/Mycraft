@@ -2,7 +2,7 @@ package de.twometer.mycraft.net.packet;
 
 import java.io.IOException;
 
-import de.twometer.mycraft.net.McBuffer;
+import de.twometer.mycraft.net.socket.McBuffer;
 
 public interface IPacket {
 

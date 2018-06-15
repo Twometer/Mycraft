@@ -1,4 +1,4 @@
-package de.twometer.mycraft.net;
+package de.twometer.mycraft.net.socket;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

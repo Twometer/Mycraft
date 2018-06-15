@@ -1,4 +1,4 @@
-package de.twometer.mycraft.net;
+package de.twometer.mycraft.net.util;
 
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;

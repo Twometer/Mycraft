@@ -3,63 +3,76 @@ package de.twometer.mycraft.net;
 import android.util.Log;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 
 import de.twometer.mycraft.net.packet.C00Handshake;
 import de.twometer.mycraft.net.packet.C00KeepAlive;
 import de.twometer.mycraft.net.packet.C00Login;
 import de.twometer.mycraft.net.packet.IPacket;
+import de.twometer.mycraft.net.socket.McBuffer;
+import de.twometer.mycraft.net.socket.McSocket;
+import de.twometer.mycraft.net.util.Zlib;
 
-public class McSocket {
+import static de.twometer.mycraft.net.util.ByteUtils.concatArrays;
+import static de.twometer.mycraft.net.util.ByteUtils.createVarInt;
 
-    private static final String TAG = "McSocket";
+public class McClient {
 
-    private Socket socket;
-    private InputStream inputStream;
-    private OutputStream outputStream;
+    private static final String TAG = "McClient";
+
+    private McSocket mcSocket = new McSocket();
 
     private boolean disconnectRequested = false;
-
     private int compressionThreshold;
     private boolean isLoginMode = true;
     private boolean doneLoadingTerrain = false;
 
+    private Listener listener = new Listener() {
+        @Override
+        public void onPacket(int id, byte[] packet) {
 
-    public void connect(String username, String hostname, int port) throws IOException {
-        Log.i(TAG, "Connecting to server...");
-        socket = new Socket();
-        socket.connect(new InetSocketAddress(hostname, port));
-        inputStream = socket.getInputStream();
-        outputStream = socket.getOutputStream();
-        startReceiverLoop();
-        Log.i(TAG, "Logging in...");
+        }
+
+        @Override
+        public void onLoginStatusChanged(String status) {
+
+        }
+
+        @Override
+        public void onLoginCompleted() {
+
+        }
+    };
+
+    public void login(String username, String hostname, int port) throws IOException {
+        listener.onLoginStatusChanged("Connecting...");
+        mcSocket.connect(hostname, port);
+        listener.onLoginStatusChanged("Logging in...");
         sendPacket(new C00Handshake(47, hostname, (short) port, 2));
         sendPacket(new C00Login(username));
+        startReceiverLoop();
     }
 
     private void startReceiverLoop() {
         (new Thread(new Runnable() {
             @Override
             public void run() {
-                while (!disconnectRequested) {
-                    try {
-                        int packetLen = readVarInt();
+                try {
+                    while (!disconnectRequested) {
+                        int packetLen = mcSocket.receiveVarInt();
                         if (packetLen > 0) {
                             receivePacket(packetLen);
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
+                    mcSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         })).start();
     }
 
     private void receivePacket(int packetLen) throws IOException {
-        McBuffer buffer = new McBuffer(receive(packetLen));
+        McBuffer buffer = new McBuffer(mcSocket.receive(packetLen));
         if (compressionThreshold > 0) {
             int sizeUncompressed = buffer.readVarInt();
             if (sizeUncompressed != 0) {
@@ -73,48 +86,22 @@ public class McSocket {
                 compressionThreshold = buffer.readVarInt();
             }
             if (packetId == 2) {
-                Log.i(TAG, "Downloading terrain...");
+                listener.onLoginStatusChanged("Downloading terrain...");
                 isLoginMode = false;
             }
         } else {
             if (packetId == 0) {
                 sendPacket(new C00KeepAlive(buffer.readVarInt()));
-            } else if (packetId == 8) {
+                return;
+            }
+            if (packetId == 8) {
                 if (!doneLoadingTerrain) {
                     doneLoadingTerrain = true;
-                    Log.i(TAG, "Connected.");
+                    listener.onLoginCompleted();
                 }
             }
+            listener.onPacket(packetId, buffer.readToEnd());
         }
-    }
-
-    private byte[] receive(int len) throws IOException {
-        byte[] buf = new byte[len];
-        int total = 0;
-        while (total < len) {
-            int rcv = inputStream.read(buf, total, len - total);
-            if (rcv <= 0) throw new IOException("Receive failed");
-            total += rcv;
-        }
-        return buf;
-    }
-
-    private int readVarInt() throws IOException {
-        int numRead = 0;
-        int result = 0;
-        byte read;
-        do {
-            read = (byte) inputStream.read();
-            int value = (read & 0b01111111);
-            result |= (value << (7 * numRead));
-
-            numRead++;
-            if (numRead > 5) {
-                throw new RuntimeException("VarInt is too big");
-            }
-        } while ((read & 0b10000000) != 0);
-
-        return result;
     }
 
     public void sendPacket(int id, byte[] data) throws IOException {
@@ -130,7 +117,7 @@ public class McSocket {
 
         byte[] packetHeader = createVarInt(packetBody.length);
         byte[] fullPacket = concatArrays(packetHeader, packetBody);
-        outputStream.write(fullPacket);
+        mcSocket.send(fullPacket);
     }
 
     public void sendPacket(IPacket packet) throws IOException {
@@ -143,17 +130,7 @@ public class McSocket {
         disconnectRequested = true;
     }
 
-    private byte[] createVarInt(int i) {
-        McBuffer buffer = new McBuffer();
-        buffer.writeVarInt(i);
-        return buffer.getData();
+    public void setListener(Listener listener) {
+        this.listener = listener;
     }
-
-    private byte[] concatArrays(byte[] a, byte[] b) {
-        byte[] c = new byte[a.length + b.length];
-        System.arraycopy(a, 0, c, 0, a.length);
-        System.arraycopy(b, 0, c, a.length, b.length);
-        return c;
-    }
-
 }
