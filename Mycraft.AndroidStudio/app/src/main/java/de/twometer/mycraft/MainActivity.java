@@ -1,12 +1,14 @@
 package de.twometer.mycraft;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 
 import java.io.IOException;
@@ -25,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
     private NativeLib nativeLib;
     private ResourceManager resourceManager;
 
+    private float previousX;
+    private float previousY;
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +59,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDrawFrame(GL10 gl) {
                 nativeLib.onDrawFrame();
+            }
+        });
+
+        glSurfaceView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                float x = event.getX();
+                float y = event.getY();
+
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    float dx = x - previousX;
+                    float dy = y - previousY;
+                    nativeLib.onRotate(dx, dy);
+                }
+                previousX = x;
+                previousY = y;
+                return true;
             }
         });
         setContentView(glSurfaceView);

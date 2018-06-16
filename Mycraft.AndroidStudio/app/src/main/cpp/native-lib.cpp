@@ -53,3 +53,11 @@ extern "C" JNIEXPORT void JNICALL
 Java_de_twometer_mycraft_interop_NativeLib_onDrawFrame(JNIEnv *env, jobject instance) {
     renderer.drawFrame();
 }
+extern "C"
+JNIEXPORT void JNICALL
+Java_de_twometer_mycraft_interop_NativeLib_onRotate(JNIEnv *env, jobject instance, jfloat dx,
+                                                    jfloat dy) {
+
+    renderer.rotatePlayer(dx, dy);
+
+}

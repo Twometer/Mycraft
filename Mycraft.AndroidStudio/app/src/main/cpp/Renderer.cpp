@@ -3,6 +3,15 @@
 //
 
 #include "Renderer.h"
+#include "Camera.h"
+#include <android/log.h>
+
+#define  LOG_TAG    "MyCraft_Native_Renderer"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+
+
+Player *player;
+Camera *camera;
 
 int viewport_width;
 int viewport_height;
@@ -18,6 +27,11 @@ GLuint terrainVao;
 void Renderer::initialize(Loader loader) {
     glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
     glViewport(0, 0, viewport_width, viewport_height);
+
+    player = new Player();
+    camera = new Camera(player, this);
+
+    terrainTexture = loader.loadTexture("atlas_blocks.png", Interpolation::NEAREST);
 
     guiShader = loader.loadShader("gui");
 
@@ -36,7 +50,8 @@ void Renderer::drawFrame() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glUseProgram(terrainShader);
-    glUniformMatrix4fv(terrainShader_loc_mvpMatrix, 1, GL_FALSE, nullptr); // TODO
+    glm::mat4 mvp = camera->compute();
+    glUniformMatrix4fv(terrainShader_loc_mvpMatrix, 1, GL_FALSE, &mvp[0][0]);
 
     glBindVertexArray(terrainVao);
     glActiveTexture(GL_TEXTURE0);
@@ -52,4 +67,14 @@ void Renderer::drawFrame() {
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(0);
 
+}
+
+glm::vec2 Renderer::getSize() {
+    return glm::vec2(viewport_width, viewport_height);
+}
+
+void Renderer::rotatePlayer(float dx, float dy) {
+    player->rotate(dx * (360.f / viewport_width), dy * (180.f / viewport_height));
+    glm::vec2 newRot = player->getRotation();
+    LOGD("Changed rotation to %f/%f\n", newRot.x, newRot.y);
 }

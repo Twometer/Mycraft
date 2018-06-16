@@ -22,7 +22,7 @@ public class ResourceManager {
 
     public ResourceManager(Context context) {
         this.context = context;
-        this.assetsDir = new File(Environment.getExternalStorageDirectory(), "Mycraft/gamedata");
+        this.assetsDir = new File(Environment.getExternalStorageDirectory(), "Mycraft");
     }
 
     public void prepareFirstRun() throws IOException {
@@ -34,6 +34,7 @@ public class ResourceManager {
         } else {
             requestFilePermissions();
         }
+        this.assetsDir = new File(assetsDir, "gamedata");
     }
 
     private void copyFolder(AssetManager manager, String folder, String file) throws IOException {

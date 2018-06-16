@@ -17,4 +17,7 @@ public class NativeLib {
     public native void onDrawFrame();
 
     public native void setAssetsFolder(String folder);
+
+    public native void onRotate(float dx, float dy);
+
 }

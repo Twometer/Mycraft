@@ -9,5 +9,5 @@ out vec4 color;
 uniform sampler2D texSampler;
 
 void main(void) {
-    color = texture(texSampler, fragmentUv) * vec4(fragmentColor, 1.0);
+    color = texture(texSampler, fragmentUV) * vec4(fragmentColor, 1.0);
 }

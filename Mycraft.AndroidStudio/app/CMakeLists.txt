@@ -22,7 +22,10 @@ add_library( # Sets the name of the library.
              src/main/cpp/native-lib.cpp
              src/main/cpp/VboBuilder.cpp
              src/main/cpp/Loader.cpp
-             src/main/cpp/Renderer.cpp)
+             src/main/cpp/Renderer.cpp
+             src/main/cpp/Player.cpp
+             src/main/cpp/Camera.cpp
+             src/main/cpp/lodepng/lodepng.cpp)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -47,5 +50,4 @@ target_link_libraries( # Specifies the target library.
                        # Links the target library to the log library
                        # included in the NDK.
                        ${log-lib}
-                       GLESv3
-                       glm)
+                       GLESv3)
