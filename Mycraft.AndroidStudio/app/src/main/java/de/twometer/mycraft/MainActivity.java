@@ -1,7 +1,11 @@
 package de.twometer.mycraft;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.opengl.GLSurfaceView;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -13,17 +17,26 @@ import javax.microedition.khronos.opengles.GL10;
 import de.twometer.mycraft.interop.NativeLib;
 import de.twometer.mycraft.net.Listener;
 import de.twometer.mycraft.net.McClient;
+import de.twometer.mycraft.res.ResourceManager;
 
 public class MainActivity extends AppCompatActivity {
 
     private GLSurfaceView glSurfaceView;
     private NativeLib nativeLib;
+    private ResourceManager resourceManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        resourceManager = new ResourceManager(this);
+        try {
+            resourceManager.prepareFirstRun();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         nativeLib = new NativeLib();
+        nativeLib.setAssetsFolder(resourceManager.getAssetsDir().getAbsolutePath());
         glSurfaceView = new GLSurfaceView(this);
         glSurfaceView.setEGLContextClientVersion(3);
         glSurfaceView.setRenderer(new GLSurfaceView.Renderer() {

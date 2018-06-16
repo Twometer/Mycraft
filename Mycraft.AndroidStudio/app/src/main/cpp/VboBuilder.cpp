@@ -7,16 +7,10 @@
 #define  LOG_TAG    "MyCraft_Native"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
-void checkError(const char* step) {
-    GLint error = glGetError();
-    if(error != 0) LOGD("=====> ERROR IN %s: %d\n", step, error);
-}
-
 VboBuilder::VboBuilder(int dimen)
 {
     this->dimen = dimen;
 }
-
 
 VboBuilder::~VboBuilder()
 {
@@ -27,23 +21,23 @@ VboBuilder::~VboBuilder()
     if (hasTexture) glDeleteBuffers(1, &textureBuffer);
 }
 
-void VboBuilder::vertex3(int x, int y, int z)
+void VboBuilder::vertex3(GLfloat x, GLfloat y, GLfloat z)
 {
-    vertices.push_back((GLfloat)x);
-    vertices.push_back((GLfloat)y);
-    vertices.push_back((GLfloat)z);
+    vertices.push_back(x);
+    vertices.push_back(y);
+    vertices.push_back(z);
 }
 
-void VboBuilder::vertex2(int x, int y)
+void VboBuilder::vertex2(GLfloat x, GLfloat y)
 {
-    vertices.push_back((GLfloat)x);
-    vertices.push_back((GLfloat)y);
+    vertices.push_back(x);
+    vertices.push_back(y);
 }
 
-void VboBuilder::texture2(int x, int y)
+void VboBuilder::texture2(GLfloat x, GLfloat y)
 {
-    texVertices.push_back((GLfloat)x);
-    texVertices.push_back((GLfloat)y);
+    texVertices.push_back(x);
+    texVertices.push_back(y);
     hasTexture = true;
 }
 
@@ -56,10 +50,10 @@ void VboBuilder::color(int r, int g, int b, int a)
     colors.push_back((GLfloat)a / 255.0f);
     hasColor = true;
 }
-void VboBuilder::drawRect(int x, int y, int w, int h, COLORDATA c) {
+void VboBuilder::drawRect(GLfloat x, GLfloat y, GLfloat w, GLfloat h, COLORDATA c) {
     drawRect(x, y, w, h, c, false);
 }
-void VboBuilder::drawRect(int x, int y, int w, int h, COLORDATA c, bool useTextures)
+void VboBuilder::drawRect(GLfloat x, GLfloat y, GLfloat w, GLfloat h, COLORDATA c, bool useTextures)
 {
     if(useTextures) texture2(0, 0);
     color(c.r, c.g, c.b, c.a);
@@ -80,11 +74,7 @@ void VboBuilder::drawRect(int x, int y, int w, int h, COLORDATA c, bool useTextu
 
 void VboBuilder::build()
 {
-    LOGD("vao is now %d", vao);
-    checkError("Before_VAOGEN");
     glGenVertexArrays(1, &vao);
-    LOGD("vao is now %d", vao);
-    checkError("GenVAO");
     glBindVertexArray(vao);
 
     glGenBuffers(1, &vertexBuffer);

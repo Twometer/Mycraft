@@ -4,6 +4,10 @@
 #include "Loader.h"
 #include <android/log.h>
 #include <vector>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+
 #define  LOG_TAG    "MyCraft_Native"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
@@ -21,7 +25,27 @@ void checkShader(GLuint shader) {
     }
 }
 
-GLuint Loader::loadShader(const char *vert, const char *frag) {
+const char *readFile(std::string path) {
+    string* contents;
+    ifstream fileStream(path.c_str(), ios::in);
+    if (fileStream.is_open()) {
+        stringstream temp;
+        temp << fileStream.rdbuf();
+        contents = new string(temp.str());
+        fileStream.close();
+    }
+    return contents->c_str();
+}
+
+GLuint Loader::loadShader(std::string shaderName) {
+    return loadShader(shaderName + "_v.glsl", shaderName + "_f.glsl");
+}
+
+GLuint Loader::loadShader(std::string vertPath, std::string fragPath) {
+    std::string shaderBase = basePath + "/shaders/";
+    const char *vert = readFile(shaderBase + vertPath);
+    const char *frag = readFile(shaderBase + fragPath);
+
     GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -45,5 +69,10 @@ GLuint Loader::loadShader(const char *vert, const char *frag) {
 
     glDeleteShader(vertexShaderId);
     glDeleteShader(fragmentShaderId);
+
     return programId;
+}
+
+void Loader::setBasePath(std::string basePath) {
+    this->basePath = basePath;
 }

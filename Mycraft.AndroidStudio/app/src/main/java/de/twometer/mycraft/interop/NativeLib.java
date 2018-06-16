@@ -15,4 +15,6 @@ public class NativeLib {
     public native void onSurfaceChanged(int width, int height);
 
     public native void onDrawFrame();
+
+    public native void setAssetsFolder(String folder);
 }

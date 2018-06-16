@@ -46,15 +46,15 @@ public:
 
     ~VboBuilder();
 
-    void vertex3(int x, int y, int z);
+    void vertex3(GLfloat x, GLfloat y, GLfloat z);
 
-    void vertex2(int x, int y);
+    void vertex2(GLfloat x, GLfloat y);
 
-    void texture2(int u, int v);
+    void texture2(GLfloat u, GLfloat v);
 
-    void drawRect(int x, int y, int width, int height, COLORDATA color, bool useTextures);
+    void drawRect(GLfloat x, GLfloat y, GLfloat width, GLfloat height, COLORDATA color, bool useTextures);
 
-    void drawRect(int x, int y, int width, int height, COLORDATA color);
+    void drawRect(GLfloat x, GLfloat y, GLfloat width, GLfloat height, COLORDATA color);
 
     void color(int r, int g, int b, int a);
 

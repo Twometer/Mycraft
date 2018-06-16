@@ -7,11 +7,14 @@
 
 
 #include <GLES3/gl3.h>
+#include <string>
 
 class Loader {
+    std::string basePath;
 public:
-    GLuint loadShader(const char* vert, const char* frag);
-
+    GLuint loadShader(std::string shaderName);
+    GLuint loadShader(std::string vertPath, std::string fragPath);
+    void setBasePath(std::string basePath);
 };
 
 
