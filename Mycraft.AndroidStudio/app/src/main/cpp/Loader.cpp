@@ -2,15 +2,13 @@
 // Created by twome on 15/06/2018.
 //
 #include "Loader.h"
-#include <android/log.h>
 #include <vector>
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include "lodepng/lodepng.h"
 
-#define  LOG_TAG    "MyCraft_Native"
-#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+#include "Logger.h"
 
 using namespace std;
 
@@ -22,7 +20,7 @@ void checkShader(GLuint shader) {
     if (InfoLogLength > 0) {
         vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
         glGetShaderInfoLog(shader, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
-        LOGD("%s\n", &VertexShaderErrorMessage[0]);
+        LOGE("%s\n", &VertexShaderErrorMessage[0]);
     }
 }
 
@@ -54,7 +52,7 @@ GLuint Loader::loadShader(std::string vertPath, std::string fragPath) {
     const char *frag = readFile(shaderBase + fragPath);
 
     if (vert == NULL || frag == NULL) {
-        LOGD("Error: Failed to load shaders\n");
+        LOGE("Error: Failed to load shaders\n");
         return 0;
     }
 
@@ -96,7 +94,7 @@ GLuint Loader::loadTexture(std::string imageName, Interpolation interpolation) {
     unsigned width, height;
     unsigned error = lodepng::decode(image, width, height, imagePath.c_str());
     if (error)
-        LOGD("Failed to decode image %s: %s\n", imageName.c_str(), lodepng_error_text(error));
+        LOGE("Failed to decode image %s: %s\n", imageName.c_str(), lodepng_error_text(error));
 
     GLuint textureId;
     glGenTextures(1, &textureId);

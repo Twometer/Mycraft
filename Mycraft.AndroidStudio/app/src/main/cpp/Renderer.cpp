@@ -4,11 +4,7 @@
 
 #include "Renderer.h"
 #include "Camera.h"
-#include <android/log.h>
-
-#define  LOG_TAG    "MyCraft_Native_Renderer"
-#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
-
+#include "Logger.h"
 
 Player *player;
 Camera *camera;

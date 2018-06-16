@@ -3,9 +3,6 @@
 //
 
 #include "VboBuilder.h"
-#include <android/log.h>
-#define  LOG_TAG    "MyCraft_Native"
-#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 VboBuilder::VboBuilder(int dimen)
 {
@@ -106,7 +103,7 @@ void VboBuilder::render()
     if (hasColor) glEnableVertexAttribArray(1);
     if (hasTexture) glEnableVertexAttribArray(2);
 
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.size() / dimen);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, static_cast<GLsizei>(vertices.size() / dimen));
 
     if (hasTexture) glDisableVertexAttribArray(2);
     if (hasColor) glDisableVertexAttribArray(1);

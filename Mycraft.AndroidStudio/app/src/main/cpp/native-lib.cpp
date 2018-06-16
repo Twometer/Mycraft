@@ -1,14 +1,11 @@
 #include <jni.h>
 #include <string>
-#include <android/log.h>
 #include <GLES3/gl3.h>
 
 #include "VboBuilder.h"
 #include "Loader.h"
 #include "Renderer.h"
-
-#define  LOG_TAG    "MyCraft_Native"
-#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+#include "Logger.h"
 
 Loader loader;
 Renderer renderer;
