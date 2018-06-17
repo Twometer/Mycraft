@@ -10,9 +10,9 @@
 class Player {
 private:
     float posX;
-    float posY ;
-    float posZ ;
-    float yaw ;
+    float posY;
+    float posZ;
+    float yaw;
     float pitch;
 public:
     glm::vec3 getPosition();
