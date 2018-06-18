@@ -1,15 +1,13 @@
 package de.twometer.mycraft;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.pm.PackageManager;
 import android.opengl.GLSurfaceView;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 
 import java.io.IOException;
 
@@ -23,12 +21,24 @@ import de.twometer.mycraft.res.ResourceManager;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final float CONTROL_PADDING = 0.05f / 2;
+    private static final float CONTROL_SIZE = 0.15f / 2;
+
     private GLSurfaceView glSurfaceView;
     private NativeLib nativeLib;
     private ResourceManager resourceManager;
 
-    private float previousX;
-    private float previousY;
+    private float previousX0;
+    private float previousY0;
+
+    private float previousX1;
+    private float previousY1;
+
+    private int viewportWidth;
+    private int viewportHeight;
+
+    private int[] controlPadBorder;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -53,6 +63,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSurfaceChanged(GL10 gl, int width, int height) {
+                viewportWidth = width;
+                viewportHeight = height;
+                controlPadBorder = new int[]{
+                        (int) (viewportWidth * (CONTROL_PADDING * 4 + CONTROL_SIZE * 3)),
+                        viewportHeight - (int) (viewportWidth * (CONTROL_PADDING * 4 + CONTROL_SIZE * 3)) // Yes, viewportWidth. Because opengl
+                };
                 nativeLib.onSurfaceChanged(width, height);
             }
 
@@ -65,16 +81,46 @@ public class MainActivity extends AppCompatActivity {
         glSurfaceView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                float x = event.getX();
-                float y = event.getY();
 
-                if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    float dx = x - previousX;
-                    float dy = y - previousY;
-                    nativeLib.onRotate(dx, dy);
+                int action = event.getActionMasked();
+                int index = event.getActionIndex();
+
+                boolean isMultitouch = event.getPointerCount() > 1;
+
+                float x = event.getX(index);
+                float y = event.getY(index);
+
+                float x0 = event.getX(0);
+                float y0 = event.getY(0);
+
+                float x1 = isMultitouch ? event.getX(1) : previousX1;
+                float y1 = isMultitouch ? event.getY(1) : previousY1;
+
+                boolean isInPad = x <= controlPadBorder[0] && y > controlPadBorder[1];
+                boolean isInPad0 = x0 <= controlPadBorder[0] && y0 > controlPadBorder[1];
+                boolean isInPad1 = x1 <= controlPadBorder[0] && y1 > controlPadBorder[1];
+
+                if (isInPad && (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN)) {
+                    nativeLib.onPadTouch(true, x, y);
                 }
-                previousX = x;
-                previousY = y;
+
+                if (isInPad && (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP)) {
+                    nativeLib.onPadTouch(false, x, y);
+                }
+
+                if (action == MotionEvent.ACTION_MOVE) {
+                    if (!isInPad0) {
+                        nativeLib.onRotate(x0 - previousX0, y0 - previousY0);
+                    } else if (!isInPad1) {
+                        nativeLib.onRotate(x1 - previousX1, y1 - previousY1);
+                    }
+                }
+
+                previousX0 = x0;
+                previousY0 = y0;
+                previousX1 = x1;
+                previousY1 = y1;
+
                 return true;
             }
         });
@@ -91,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (glSurfaceView != null) glSurfaceView.onResume();
     }
 

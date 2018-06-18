@@ -32,6 +32,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/render/AsyncSectionQueue.cpp
              src/main/cpp/block/Block.cpp
              src/main/cpp/block/BlockRegistry.cpp
+             src/main/cpp/gui/ControlPad.cpp
              src/main/cpp/lodepng/lodepng.cpp)
 
 # Searches for a specified prebuilt library and stores the path as a

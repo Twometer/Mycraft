@@ -31,12 +31,6 @@ mat4 Camera::compute() {
             glm::cos(pitch) * glm::cos(yaw)
     );
 
-    vec3 directionMovement(
-            glm::sin(yaw),
-            0,
-            glm::cos(yaw)
-    );
-
     vec3 right(
             sin(yaw - 1.5707f),
             0,

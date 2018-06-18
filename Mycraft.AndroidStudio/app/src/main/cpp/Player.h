@@ -6,6 +6,7 @@
 #define MYCRAFT_ANDROIDSTUDIO_PLAYER_H
 
 #include "glm/glm.hpp"
+#include "gui/ControlPad.h"
 
 class Player {
 private:
@@ -24,6 +25,8 @@ public:
     void rotate(float dx, float dy);
 
     void move(float dx, float dy, float dz);
+
+    void tick(ControlPad *pad);
 };
 
 

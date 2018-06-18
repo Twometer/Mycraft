@@ -4,16 +4,17 @@
 
 #include "Renderer.h"
 #include "Camera.h"
-#include "Logger.h"
 #include "VboBuilder.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "world/World.h"
 #include "render/AsyncSectionQueue.h"
 #include "block/BlockRegistry.h"
+#include "gui/ControlPad.h"
 
 Player *player;
 Camera *camera;
 World *world;
+ControlPad *controlPad;
 
 int viewport_width;
 int viewport_height;
@@ -34,6 +35,7 @@ void Renderer::initialize(Loader loader) {
     glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
     glViewport(0, 0, viewport_width, viewport_height);
 
+    controlPad = new ControlPad();
     player = new Player();
     camera = new Camera(player, this);
     world = new World();
@@ -43,7 +45,6 @@ void Renderer::initialize(Loader loader) {
             world->setBlock(i, 0, j, 1);
         }
     }
-
 
     AsyncSectionQueue::initialize();
     BlockRegistry::initialize();
@@ -67,7 +68,8 @@ void Renderer::resize(int width, int height) {
     viewport_width = width;
     viewport_height = height;
     glViewport(0, 0, viewport_width, viewport_height);
-    ortho_projection = glm::ortho(-1.f, 1.0f, 1.0f, -1.0f);
+    ortho_projection = glm::ortho(-1.0f, 1.0f, 1.0f, -1.0f);
+    controlPad->build(viewport_width, viewport_height);
 }
 
 void Renderer::drawFrame() {
@@ -93,9 +95,11 @@ void Renderer::drawFrame() {
 
     glUseProgram(guiShader);
     glUniformMatrix4fv(guiShader_loc_projectionMatrix, 1, GL_FALSE, &ortho_projection[0][0]);
-    VboBuilder vboBuilder = VboBuilder(2);
-    vboBuilder.drawRect(-0.05f, -0.05f, 0.05f, 0.05f, COLORDATA(255, 255, 255, 255));
-    vboBuilder.buildAndRender();
+
+    // Control pad
+    controlPad->render();
+
+    player->tick(controlPad);
 }
 
 glm::vec2 Renderer::getSize() {
@@ -106,3 +110,8 @@ void Renderer::rotatePlayer(float dx, float dy) {
     player->rotate(-dx * (360.f / viewport_width), -dy * (180.f / viewport_height));
     glm::vec2 newRot = player->getRotation();
 }
+
+void Renderer::onPadTouch(bool down, float x, float y) {
+    controlPad->handleTouch(down, x, y);
+}
+

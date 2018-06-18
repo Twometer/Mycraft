@@ -20,4 +20,6 @@ public class NativeLib {
 
     public native void onRotate(float dx, float dy);
 
+    public native void onPadTouch(boolean down, float x, float y);
+
 }

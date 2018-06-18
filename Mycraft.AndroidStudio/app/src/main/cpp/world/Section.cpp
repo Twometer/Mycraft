@@ -30,13 +30,13 @@ void Section::render(int pass) {
 
 void Section::setBlock(int x, int y, int z, unsigned char block) {
     int idx = (y * 16 + z) * 16 + x;
-    if (idx > 0 && idx < dataLen)
+    if (idx >= 0 && idx < dataLen)
         data[idx] = block;
 }
 
 unsigned char Section::getBlock(int x, int y, int z) {
     int idx = (y * 16 + z) * 16 + x;
-    if (idx > 0 && idx < dataLen)
+    if (idx >= 0 && idx < dataLen)
         return data[idx];
     else return 0;
 }

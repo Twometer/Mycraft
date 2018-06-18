@@ -19,6 +19,8 @@ public:
     glm::vec2 getSize();
 
     void rotatePlayer(float dx, float dy);
+
+    void onPadTouch(bool down, float x, float y);
 };
 
 

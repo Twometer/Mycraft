@@ -58,3 +58,11 @@ Java_de_twometer_mycraft_interop_NativeLib_onRotate(JNIEnv *env, jobject instanc
     renderer.rotatePlayer(dx, dy);
 
 }
+extern "C"
+JNIEXPORT void JNICALL
+Java_de_twometer_mycraft_interop_NativeLib_onPadTouch(JNIEnv *env, jobject instance, jboolean down,
+                                                      jfloat x, jfloat y) {
+
+    renderer.onPadTouch(down, x, y);
+
+}
