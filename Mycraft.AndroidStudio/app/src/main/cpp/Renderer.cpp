@@ -6,10 +6,10 @@
 #include "Camera.h"
 #include "VboBuilder.h"
 #include "glm/gtc/matrix_transform.hpp"
-#include "world/World.h"
 #include "render/AsyncSectionQueue.h"
 #include "block/BlockRegistry.h"
 #include "gui/ControlPad.h"
+#include "Logger.h"
 
 Player *player;
 Camera *camera;
@@ -32,19 +32,29 @@ GLuint terrainVao;
 glm::mat4 ortho_projection;
 
 void Renderer::initialize(Loader loader) {
-    glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
+    glClearColor(0.1f, 0.7f, 1.0f, 1.0f);
     glViewport(0, 0, viewport_width, viewport_height);
 
     controlPad = new ControlPad();
     player = new Player();
     camera = new Camera(player, this);
     world = new World();
-    world->addChunk(new Chunk(0, 0));
-    for (int i = 0; i < 15; i++) {
-        for (int j = 0; j < 15; j++) {
-            world->setBlock(i, 0, j, 1);
+
+    for (int i = 0; i < 16; i++) {
+        for (int j = 0; j < 16; j++) {
+            Chunk *chk = new Chunk(i, j);
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 64; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        chk->setBlock(x, y, z, 1);
+                    }
+                }
+            }
+            world->addChunk(chk);
         }
     }
+
+    LOGD("World generated");
 
     AsyncSectionQueue::initialize();
     BlockRegistry::initialize();
@@ -113,5 +123,9 @@ void Renderer::rotatePlayer(float dx, float dy) {
 
 void Renderer::onPadTouch(bool down, float x, float y) {
     controlPad->handleTouch(down, x, y);
+}
+
+World *Renderer::getWorld() {
+    return world;
 }
 

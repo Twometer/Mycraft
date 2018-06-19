@@ -6,8 +6,8 @@
 #include "../render/AsyncSectionQueue.h"
 
 Section::Section(int x, int idx, int z) {
+    dataLen = 4096;
     data = new unsigned char[dataLen];
-    dataLen = 16 * 16 * 16;
 
     this->x = x;
     this->idx = idx;

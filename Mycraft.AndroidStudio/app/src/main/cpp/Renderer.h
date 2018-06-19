@@ -7,6 +7,7 @@
 
 #include "Loader.h"
 #include "glm/vec2.hpp"
+#include "world/World.h"
 
 class Renderer {
 public:
@@ -21,6 +22,8 @@ public:
     void rotatePlayer(float dx, float dy);
 
     void onPadTouch(bool down, float x, float y);
+
+    static World* getWorld();
 };
 
 

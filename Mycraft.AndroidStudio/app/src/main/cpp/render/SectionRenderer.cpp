@@ -5,6 +5,7 @@
 #include "SectionRenderer.h"
 #include "Vertices.h"
 #include "../block/BlockRegistry.h"
+#include "../Renderer.h"
 
 #define TEXTURE_OFFSET 0.03125f
 
@@ -53,23 +54,23 @@ void SectionRenderer::buildData() {
                                     1.0f, vertices, colors, textureCoords, &verticesAlloc,
                                     &textureCoordsAlloc, &colorsAlloc);
                     } else {
-                        if (getBlock(x + 1, y, z, absX, absY, absZ) == 0)
+                        if (getBlock(x + 1, y, z, absX + 1, absY, absZ) == 0)
                             putGeometry(vertices_positive_x, tvertices_positive_x, absX,
                                         absY, absZ, texX, texY, 0.75f, vertices, colors,
                                         textureCoords, &verticesAlloc, &textureCoordsAlloc,
                                         &colorsAlloc);
-                        if (getBlock(x - 1, y, z, absX, absY, absZ) == 0)
+                        if (getBlock(x - 1, y, z, absX - 1, absY, absZ) == 0)
                             putGeometry(vertices_negative_x, tvertices_negative_x, absX,
                                         absY, absZ, texX, texY, 0.75f, vertices, colors,
                                         textureCoords, &verticesAlloc, &textureCoordsAlloc,
                                         &colorsAlloc);
 
-                        if (getBlock(x, y, z + 1, absX, absY, absZ) == 0)
+                        if (getBlock(x, y, z + 1, absX, absY, absZ + 1) == 0)
                             putGeometry(vertices_positive_z, tvertices_positive_z, absX,
                                         absY, absZ, texX, texY, 0.65f, vertices, colors,
                                         textureCoords, &verticesAlloc, &textureCoordsAlloc,
                                         &colorsAlloc);
-                        if (getBlock(x, y, z - 1, absX, absY, absZ) == 0)
+                        if (getBlock(x, y, z - 1, absX, absY, absZ - 1) == 0)
                             putGeometry(vertices_negative_z, tvertices_negative_z, absX,
                                         absY, absZ, texX, texY, 0.65f, vertices, colors,
                                         textureCoords, &verticesAlloc, &textureCoordsAlloc,
@@ -77,7 +78,7 @@ void SectionRenderer::buildData() {
 
                         texX = block.topTex.x;
                         texY = block.topTex.y;
-                        if (getBlock(x, y + 1, z, absX, absY, absZ) == 0)
+                        if (getBlock(x, y + 1, z, absX, absY + 1, absZ) == 0)
                             putGeometry(vertices_positive_y, tvertices_positive_y, absX,
                                         absY, absZ, texX, texY, 1.00f, vertices, colors,
                                         textureCoords, &verticesAlloc, &textureCoordsAlloc,
@@ -85,7 +86,7 @@ void SectionRenderer::buildData() {
 
                         texX = block.bottomTex.x;
                         texY = block.bottomTex.y;
-                        if (getBlock(x, y - 1, z, absX, absY, absZ) == 0)
+                        if (getBlock(x, y - 1, z, absX, absY - 1, absZ) == 0)
                             putGeometry(vertices_negative_y, tvertices_negative_y, absX,
                                         absY, absZ, texX, texY, 0.60f, vertices, colors,
                                         textureCoords, &verticesAlloc, &textureCoordsAlloc,
@@ -168,6 +169,6 @@ SectionRenderer::putGeometry(const GLfloat *vertices, const GLfloat *textureCoor
 
 unsigned char SectionRenderer::getBlock(int x, int y, int z, int absX, int absY, int absZ) {
     if (x < 0 || y < 0 || z < 0 || x > 15 || y > 15 || z > 15)
-        return section->getBlock(x, y, z);
-    else return 0; // TODO
+        return Renderer::getWorld()->getBlock(absX, absY, absZ);
+    else return section->getBlock(x, y, z);
 }
