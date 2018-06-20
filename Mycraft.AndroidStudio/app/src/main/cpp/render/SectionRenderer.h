@@ -35,7 +35,7 @@ private:
     void putGeometry(const GLfloat *vertices, const GLfloat *textureCoords, int x, int y, int z,
                      int texX, int texY, GLfloat color, GLfloat *verticesTarget,
                      GLfloat *colorTarget, GLfloat *textureTarget, int *verticesCounter,
-                     int *textureCounter, int *colorCounter);
+                     int *textureCounter, int *colorCounter, int face);
 
     unsigned char getBlock(int x, int y, int z, int absX, int absY, int absZ);
 

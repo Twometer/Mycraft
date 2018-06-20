@@ -8,6 +8,9 @@
 #include "../Renderer.h"
 
 #define TEXTURE_OFFSET 0.03125f
+#define FACE_X 0
+#define FACE_Y 1
+#define FACE_Z 2
 
 SectionRenderer::SectionRenderer(Section *section) {
     this->section = section;
@@ -17,6 +20,41 @@ SectionRenderer::SectionRenderer(Section *section) {
     this->colorsAlloc = 0;
     this->textureCoords = new GLfloat[90000]; // Two entries per vertex
     this->textureCoordsAlloc = 0;
+}
+
+bool canOcclude(int x, int y, int z) {
+    return Renderer::getWorld()->getBlock(x, y, z);
+}
+
+float getOcclusionFactor(int x, int y, int z, int vx, int vy, int vz, int f) {
+    if (vx == 0) vx = -1;
+    if (vy == 0) vy = -1;
+    if (vz == 0) vz = -1;
+
+    if (f == 0) {
+        float oc = 1.0f;
+        if (canOcclude(x + vx, y + vy, z)) oc -= 0.2;
+        if (canOcclude(x + vx, y + vy, z + vz)) oc -= 0.2;
+        if (canOcclude(x + vx, y, z + vz)) oc -= 0.2;
+        return oc;
+    }
+
+    if (f == 1) {
+        float oc = 1.0f;
+        if (canOcclude(x + vx, y + vy, z)) oc -= 0.2;
+        if (canOcclude(x, y + vy, z + vz)) oc -= 0.2;
+        if (canOcclude(x + vx, y + vy, z + vz)) oc -= 0.2;
+        return oc;
+    }
+
+    if (f == 2) {
+        float oc = 1.0f;
+        if (canOcclude(x + vx, y, z + vz)) oc -= 0.2;
+        if (canOcclude(x, y + vy, z + vz)) oc -= 0.2;
+        if (canOcclude(x + vx, y + vy, z + vz)) oc -= 0.2;
+        return oc;
+    }
+    return 1.0f;
 }
 
 void SectionRenderer::buildData() {
@@ -43,38 +81,38 @@ void SectionRenderer::buildData() {
                     if (block.rendererType == Plant) {
                         putGeometry(plantvertices_a, tplantvertices_a, absX, absY, absZ, texX, texY,
                                     1.0f, vertices, colors, textureCoords, &verticesAlloc,
-                                    &textureCoordsAlloc, &colorsAlloc);
+                                    &textureCoordsAlloc, &colorsAlloc, FACE_X);
                         putGeometry(plantvertices_b, tplantvertices_b, absX, absY, absZ, texX, texY,
                                     1.0f, vertices, colors, textureCoords, &verticesAlloc,
-                                    &textureCoordsAlloc, &colorsAlloc);
+                                    &textureCoordsAlloc, &colorsAlloc, FACE_X);
                         putGeometry(plantvertices_c, tplantvertices_c, absX, absY, absZ, texX, texY,
                                     1.0f, vertices, colors, textureCoords, &verticesAlloc,
-                                    &textureCoordsAlloc, &colorsAlloc);
+                                    &textureCoordsAlloc, &colorsAlloc, FACE_X);
                         putGeometry(plantvertices_d, tplantvertices_d, absX, absY, absZ, texX, texY,
                                     1.0f, vertices, colors, textureCoords, &verticesAlloc,
-                                    &textureCoordsAlloc, &colorsAlloc);
+                                    &textureCoordsAlloc, &colorsAlloc, FACE_X);
                     } else {
                         if (getBlock(x + 1, y, z, absX + 1, absY, absZ) == 0)
                             putGeometry(vertices_positive_x, tvertices_positive_x, absX,
                                         absY, absZ, texX, texY, 0.75f, vertices, colors,
                                         textureCoords, &verticesAlloc, &textureCoordsAlloc,
-                                        &colorsAlloc);
+                                        &colorsAlloc, FACE_X);
                         if (getBlock(x - 1, y, z, absX - 1, absY, absZ) == 0)
                             putGeometry(vertices_negative_x, tvertices_negative_x, absX,
                                         absY, absZ, texX, texY, 0.75f, vertices, colors,
                                         textureCoords, &verticesAlloc, &textureCoordsAlloc,
-                                        &colorsAlloc);
+                                        &colorsAlloc, FACE_X);
 
                         if (getBlock(x, y, z + 1, absX, absY, absZ + 1) == 0)
                             putGeometry(vertices_positive_z, tvertices_positive_z, absX,
                                         absY, absZ, texX, texY, 0.65f, vertices, colors,
                                         textureCoords, &verticesAlloc, &textureCoordsAlloc,
-                                        &colorsAlloc);
+                                        &colorsAlloc, FACE_Z);
                         if (getBlock(x, y, z - 1, absX, absY, absZ - 1) == 0)
                             putGeometry(vertices_negative_z, tvertices_negative_z, absX,
                                         absY, absZ, texX, texY, 0.65f, vertices, colors,
                                         textureCoords, &verticesAlloc, &textureCoordsAlloc,
-                                        &colorsAlloc);
+                                        &colorsAlloc, FACE_Z);
 
                         texX = block.topTex.x;
                         texY = block.topTex.y;
@@ -82,7 +120,7 @@ void SectionRenderer::buildData() {
                             putGeometry(vertices_positive_y, tvertices_positive_y, absX,
                                         absY, absZ, texX, texY, 1.00f, vertices, colors,
                                         textureCoords, &verticesAlloc, &textureCoordsAlloc,
-                                        &colorsAlloc);
+                                        &colorsAlloc, FACE_Y);
 
                         texX = block.bottomTex.x;
                         texY = block.bottomTex.y;
@@ -90,7 +128,7 @@ void SectionRenderer::buildData() {
                             putGeometry(vertices_negative_y, tvertices_negative_y, absX,
                                         absY, absZ, texX, texY, 0.60f, vertices, colors,
                                         textureCoords, &verticesAlloc, &textureCoordsAlloc,
-                                        &colorsAlloc);
+                                        &colorsAlloc, FACE_Y);
                     }
                 }
             }
@@ -143,17 +181,27 @@ void
 SectionRenderer::putGeometry(const GLfloat *vertices, const GLfloat *textureCoords, int x, int y,
                              int z, int texX, int texY, GLfloat color, GLfloat *verticesTarget,
                              GLfloat *colorTarget, GLfloat *textureTarget, int *verticesCounter,
-                             int *textureCounter, int *colorCounter) {
+                             int *textureCounter, int *colorCounter, int face) {
+    GLfloat vertX;
+    GLfloat vertY;
+    GLfloat vertZ;
 
     for (int i = 0; i < 18; i += 3) {
         int vc = *verticesCounter;
         int cc = *colorCounter;
-        verticesTarget[vc] = vertices[i] + x;
-        verticesTarget[vc + 1] = vertices[i + 1] + y;
-        verticesTarget[vc + 2] = vertices[i + 2] + z;
+        vertX = vertices[i];
+        vertY = vertices[i + 1];
+        vertZ = vertices[i + 2];
+
+        verticesTarget[vc] = vertX + x;
+        verticesTarget[vc + 1] = vertY + y;
+        verticesTarget[vc + 2] = vertZ + z;
         (*verticesCounter) += 3;
-        colorTarget[cc] = color;
-        (*colorCounter) ++;
+
+        colorTarget[cc] = color * getOcclusionFactor(x, y, z, static_cast<int>(vertX),
+                                                     static_cast<int>(vertY),
+                                                     static_cast<int>(vertZ), face);
+        (*colorCounter)++;
     }
 
     for (int i = 0; i < 12; i += 2) {
