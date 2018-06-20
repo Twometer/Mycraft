@@ -4,6 +4,7 @@
 
 #include "Section.h"
 #include "../render/AsyncSectionQueue.h"
+#include "../Renderer.h"
 
 Section::Section(int x, int idx, int z) {
     dataLen = 4096;
@@ -12,6 +13,10 @@ Section::Section(int x, int idx, int z) {
     this->x = x;
     this->idx = idx;
     this->z = z;
+
+    this->worldXCenter = (x << 4) + 8;
+    this->worldYCenter = (idx << 4) + 8;
+    this->worldZCenter = (z << 4) + 8;
 
     this->sectionRenderer = new SectionRenderer(this);
 }
@@ -43,4 +48,8 @@ unsigned char Section::getBlock(int x, int y, int z) {
 
 void Section::setState(int state) {
     this->state = state;
+}
+
+bool Section::isInFrustum() {
+    return Renderer::isCubeInFrustum(worldXCenter, worldYCenter, worldZCenter, 8);
 }

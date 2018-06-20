@@ -57,7 +57,9 @@ void Player::tick(ControlPad *pad) {
         move(-direction.x, -direction.y, -direction.z);
     } else if (pad->pressedKey == CONTROL_RIGHT) {
         move(right.x, right.y, right.z);
-    } else if(pad->pressedKey == CONTROL_LEFT){
+    } else if (pad->pressedKey == CONTROL_LEFT) {
         move(-right.x, -right.y, -right.z);
+    } else if (pad->pressedKey == CONTROL_JUMP) {
+        move(0, .2, 0);
     }
 }

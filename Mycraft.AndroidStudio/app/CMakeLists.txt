@@ -25,6 +25,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/Renderer.cpp
              src/main/cpp/Player.cpp
              src/main/cpp/Camera.cpp
+             src/main/cpp/Frustum.cpp
              src/main/cpp/world/World.cpp
              src/main/cpp/world/Chunk.cpp
              src/main/cpp/world/Section.cpp

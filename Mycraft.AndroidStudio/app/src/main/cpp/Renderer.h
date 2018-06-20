@@ -8,7 +8,9 @@
 #include "Loader.h"
 #include "glm/vec2.hpp"
 #include "world/World.h"
+#include "Camera.h"
 
+class Camera;
 class Renderer {
 public:
     void initialize(Loader loader);
@@ -24,6 +26,10 @@ public:
     void onPadTouch(bool down, float x, float y);
 
     static World* getWorld();
+
+    static Player* getPlayer();
+
+    static bool isCubeInFrustum(float x, float y, float z, float size);
 };
 
 

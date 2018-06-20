@@ -4,6 +4,9 @@
 
 #include <cstdlib>
 #include "World.h"
+#include "../Renderer.h"
+
+#define RENDER_DISTANCE 8
 
 World::World() {
     chunkArray = new Chunk *[1024];
@@ -13,9 +16,15 @@ World::World() {
 
 
 void World::render(int pass) {
+    glm::vec3 pos = Renderer::getPlayer()->getPosition();
+    int chX = (int) pos.x >> 4;
+    int chZ = (int) pos.z >> 4;
     for (int i = 0; i < chunkArrayLen; i++) {
         Chunk *chkPtr = chunkArray[i];
         if (chkPtr == NULL) continue;
+        if (glm::abs(chkPtr->x - chX) > RENDER_DISTANCE ||
+            glm::abs(chkPtr->z - chZ) > RENDER_DISTANCE)
+            continue;
         chkPtr->render(pass);
     }
 }

@@ -13,7 +13,7 @@ SectionRenderer::SectionRenderer(Section *section) {
     this->section = section;
     this->vertices = new GLfloat[120000]; // Three entries per vertex
     this->verticesAlloc = 0;
-    this->colors = new GLfloat[120000]; // Three entries per vertex
+    this->colors = new GLfloat[40000]; // Three entries per vertex
     this->colorsAlloc = 0;
     this->textureCoords = new GLfloat[90000]; // Two entries per vertex
     this->textureCoordsAlloc = 0;
@@ -29,12 +29,12 @@ void SectionRenderer::buildData() {
     int absY;
     int absZ;
 
-    for (int x = 0; x < 16; x++) {
-        absX = x + xo;
+    for (int z = 0; z < 16; z++) {
+        absZ = z + zo;
         for (int y = 0; y < 16; y++) {
             absY = y + yo;
-            for (int z = 0; z < 16; z++) {
-                absZ = z + zo;
+            for (int x = 0; x < 16; x++) {
+                absX = x + xo;
                 unsigned char blockId = sec.getBlock(x, y, z);
                 if (blockId != 0) {
                     Block block = *BlockRegistry::getBlock(blockId);
@@ -131,7 +131,7 @@ void SectionRenderer::render() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *) 0);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffers.colorBuffer);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void *) 0);
+    glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, (void *) 0);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffers.textureBuffer);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void *) 0);
@@ -153,9 +153,7 @@ SectionRenderer::putGeometry(const GLfloat *vertices, const GLfloat *textureCoor
         verticesTarget[vc + 2] = vertices[i + 2] + z;
         (*verticesCounter) += 3;
         colorTarget[cc] = color;
-        colorTarget[cc + 1] = color;
-        colorTarget[cc + 2] = color;
-        (*colorCounter) += 3;
+        (*colorCounter) ++;
     }
 
     for (int i = 0; i < 12; i += 2) {

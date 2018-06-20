@@ -16,6 +16,7 @@ const float FAR_PLANE = 2000.f;
 Camera::Camera(Player *player, Renderer *renderer) {
     this->player = player;
     this->renderer = renderer;
+    this->frustum = Frustum();
 }
 
 mat4 Camera::compute() {
@@ -52,5 +53,11 @@ mat4 Camera::compute() {
             up
     );
 
-    return projectionMatrix * viewMatrix * modelMatrix;
+    mat4 mvpMatrix = projectionMatrix * viewMatrix * modelMatrix;
+    frustum.calculate(mvpMatrix);
+    return mvpMatrix;
+}
+
+Frustum Camera::getFrustum() {
+    return frustum;
 }

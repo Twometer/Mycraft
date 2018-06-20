@@ -18,6 +18,11 @@ private:
     unsigned char *data;
     int dataLen;
     int state = STATE_SHOULD_BUILD;
+
+    int worldXCenter;
+    int worldYCenter;
+    int worldZCenter;
+
 public:
 
     int x;
@@ -36,6 +41,7 @@ public:
 
     void setState(int state);
 
+    bool isInFrustum();
 };
 
 

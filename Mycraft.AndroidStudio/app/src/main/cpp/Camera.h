@@ -8,17 +8,21 @@
 
 #include "Player.h"
 #include "Renderer.h"
+#include "Frustum.h"
 
+class Renderer;
 class Camera {
 
 private:
     Player *player;
     Renderer *renderer;
+    Frustum frustum;
 public:
     Camera(Player *player, Renderer *renderer);
 
     glm::mat4 compute();
 
+    Frustum getFrustum();
 };
 
 

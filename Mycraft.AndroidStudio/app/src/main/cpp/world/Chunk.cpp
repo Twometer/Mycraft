@@ -33,7 +33,7 @@ unsigned char Chunk::getBlock(int x, int y, int z) {
 void Chunk::render(int pass) {
     for (int i = 0; i < 16; i++) {
         Section *section = sections[i];
-        if (section != NULL)
+        if (section != NULL && section->isInFrustum())
             section->render(pass);
     }
 }

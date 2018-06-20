@@ -3,13 +3,13 @@
 //
 
 #include "Renderer.h"
-#include "Camera.h"
 #include "VboBuilder.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "render/AsyncSectionQueue.h"
 #include "block/BlockRegistry.h"
 #include "gui/ControlPad.h"
 #include "Logger.h"
+#include "glm/gtc/random.hpp"
 
 Player *player;
 Camera *camera;
@@ -46,7 +46,8 @@ void Renderer::initialize(Loader loader) {
             for (int x = 0; x < 16; x++) {
                 for (int y = 0; y < 64; y++) {
                     for (int z = 0; z < 16; z++) {
-                        chk->setBlock(x, y, z, 1);
+                        if (random() % 2)
+                            chk->setBlock(x, y, z, 1);
                     }
                 }
             }
@@ -84,6 +85,8 @@ void Renderer::resize(int width, int height) {
 
 void Renderer::drawFrame() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
 
     glUseProgram(terrainShader);
     glm::mat4 mvp = camera->compute();
@@ -102,6 +105,9 @@ void Renderer::drawFrame() {
     glDisableVertexAttribArray(2);
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(0);
+
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
 
     glUseProgram(guiShader);
     glUniformMatrix4fv(guiShader_loc_projectionMatrix, 1, GL_FALSE, &ortho_projection[0][0]);
@@ -127,5 +133,13 @@ void Renderer::onPadTouch(bool down, float x, float y) {
 
 World *Renderer::getWorld() {
     return world;
+}
+
+bool Renderer::isCubeInFrustum(float x, float y, float z, float size) {
+    return camera->getFrustum().cubeInFrustum(x, y, z, size);
+}
+
+Player *Renderer::getPlayer() {
+    return player;
 }
 
