@@ -22,6 +22,8 @@ public:
     void setBlock(int x, int y, int z, unsigned char block);
 
     unsigned char getBlock(int x, int y, int z);
+
+    int loadFromPacket(unsigned char* data, unsigned short bitmask);
 };
 
 

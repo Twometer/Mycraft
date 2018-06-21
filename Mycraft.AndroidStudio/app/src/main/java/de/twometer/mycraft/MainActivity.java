@@ -34,11 +34,12 @@ public class MainActivity extends AppCompatActivity {
     private float previousX1;
     private float previousY1;
 
+    private boolean previousMultitouch;
+
     private int viewportWidth;
     private int viewportHeight;
 
     private int[] controlPadBorder;
-
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSurfaceCreated(GL10 gl, EGLConfig config) {
                 nativeLib.onSurfaceCreated();
+                startNetworkThread();
             }
 
             @Override
@@ -108,6 +110,11 @@ public class MainActivity extends AppCompatActivity {
                     nativeLib.onPadTouch(false, x, y);
                 }
 
+                if (!isMultitouch && previousMultitouch) {
+                    previousX0 = x0;
+                    previousY0 = y0;
+                }
+
                 if (action == MotionEvent.ACTION_MOVE) {
                     if (!isInPad0) {
                         nativeLib.onRotate(x0 - previousX0, y0 - previousY0);
@@ -120,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 previousY0 = y0;
                 previousX1 = x1;
                 previousY1 = y1;
-
+                previousMultitouch = isMultitouch;
                 return true;
             }
         });

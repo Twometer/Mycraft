@@ -10,11 +10,13 @@
 #include "gui/ControlPad.h"
 #include "Logger.h"
 #include "glm/gtc/random.hpp"
+#include "net/PacketHandler.h"
 
 Player *player;
 Camera *camera;
 World *world;
 ControlPad *controlPad;
+PacketHandler *packetHandler;
 
 int viewport_width;
 int viewport_height;
@@ -32,30 +34,14 @@ GLuint terrainVao;
 glm::mat4 ortho_projection;
 
 void Renderer::initialize(Loader loader) {
-    glClearColor(0.1f, 0.7f, 1.0f, 1.0f);
+    glClearColor(0.537f, 0.808f, 0.98f, 1.0f);
     glViewport(0, 0, viewport_width, viewport_height);
 
     controlPad = new ControlPad();
     player = new Player();
     camera = new Camera(player, this);
     world = new World();
-
-    for (int i = 0; i < 16; i++) {
-        for (int j = 0; j < 16; j++) {
-            Chunk *chk = new Chunk(i, j);
-            for (int x = 0; x < 16; x++) {
-                for (int y = 0; y < 64; y++) {
-                    for (int z = 0; z < 16; z++) {
-                        if (random() % 2)
-                            chk->setBlock(x, y, z, 1);
-                    }
-                }
-            }
-            world->addChunk(chk);
-        }
-    }
-
-    LOGD("World generated");
+    packetHandler = new PacketHandler();
 
     AsyncSectionQueue::initialize();
     BlockRegistry::initialize();
@@ -141,5 +127,9 @@ bool Renderer::isCubeInFrustum(float x, float y, float z, float size) {
 
 Player *Renderer::getPlayer() {
     return player;
+}
+
+PacketHandler *Renderer::getPacketHandler() {
+    return packetHandler;
 }
 

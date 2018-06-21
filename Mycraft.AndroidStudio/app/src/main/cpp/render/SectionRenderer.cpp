@@ -23,7 +23,8 @@ SectionRenderer::SectionRenderer(Section *section) {
 }
 
 bool canOcclude(int x, int y, int z) {
-    return Renderer::getWorld()->getBlock(x, y, z);
+    unsigned char blockId = Renderer::getWorld()->getBlock(x, y, z);
+    return blockId && !BlockRegistry::isPlant(blockId);
 }
 
 float getOcclusionFactor(int x, int y, int z, int vx, int vy, int vz, int f) {
@@ -214,7 +215,11 @@ SectionRenderer::putGeometry(const GLfloat *vertices, const GLfloat *textureCoor
 }
 
 unsigned char SectionRenderer::getBlock(int x, int y, int z, int absX, int absY, int absZ) {
+    unsigned char blockId = 0;
     if (x < 0 || y < 0 || z < 0 || x > 15 || y > 15 || z > 15)
-        return Renderer::getWorld()->getBlock(absX, absY, absZ);
-    else return section->getBlock(x, y, z);
+        blockId = Renderer::getWorld()->getBlock(absX, absY, absZ);
+    else blockId = section->getBlock(x, y, z);
+    if (BlockRegistry::isTransparent(blockId))
+        return 0;
+    else return blockId;
 }

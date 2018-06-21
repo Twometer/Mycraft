@@ -30,6 +30,14 @@ void Player::move(float dx, float dy, float dz) {
     posZ += dz;
 }
 
+
+void Player::setPosition(float x, float y, float z) {
+    posX = x;
+    posY = y;
+    posZ = z;
+}
+
+
 void Player::tick(ControlPad *pad) {
 
     float yawRad = glm::radians(yaw);

@@ -14,8 +14,8 @@ extern "C" JNIEXPORT void JNICALL
 Java_de_twometer_mycraft_interop_NativeLib_onPacket(JNIEnv *env, jobject instance, jint id,
                                                     jbyteArray packet_) {
     jbyte *packet = env->GetByteArrayElements(packet_, NULL);
-
-
+    int packetLen = env->GetArrayLength(packet_);
+    renderer.getPacketHandler()->onPacket(id, reinterpret_cast<unsigned char *>(packet), packetLen);
     env->ReleaseByteArrayElements(packet_, packet, 0);
 }
 

@@ -9,6 +9,7 @@
 #include "glm/vec2.hpp"
 #include "world/World.h"
 #include "Camera.h"
+#include "net/PacketHandler.h"
 
 class Camera;
 class Renderer {
@@ -24,6 +25,8 @@ public:
     void rotatePlayer(float dx, float dy);
 
     void onPadTouch(bool down, float x, float y);
+
+    PacketHandler* getPacketHandler();
 
     static World* getWorld();
 
