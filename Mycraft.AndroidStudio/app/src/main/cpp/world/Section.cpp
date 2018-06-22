@@ -9,6 +9,7 @@
 Section::Section(int x, int idx, int z) {
     dataLen = 4096;
     data = new unsigned char[dataLen];
+    memset(data, 0, static_cast<size_t>(dataLen));
 
     this->x = x;
     this->idx = idx;
