@@ -9,6 +9,8 @@
 #define RENDERPASS_FLUID 2
 
 #include "Chunk.h"
+#include "AABB.h"
+#include <vector>
 
 class World {
 private:
@@ -23,6 +25,8 @@ public:
     unsigned char getBlock(int x, int y, int z);
 
     void addChunk(Chunk *chunk);
+
+    std::vector<AABB> getCubes(int x, int y, int z, int r);
 
     World();
 };

@@ -8,17 +8,28 @@
 #include "glm/glm.hpp"
 #include "gui/ControlPad.h"
 
+#define GRAVITY 0.08f
+#define SLIPPERINESS 0.61f
+
 class Player {
 private:
     float posX;
     float posY;
     float posZ;
+    float lastTickPosX;
+    float lastTickPosY;
+    float lastTickPosZ;
+    float motionX;
+    float motionY;
+    float motionZ;
     float yaw;
     float pitch;
+    int jumpTicks;
+    bool onGround;
 public:
     glm::vec3 getPosition();
 
-    glm::vec3 getEyePosition();
+    glm::vec3 getEyePositionInterpolated();
 
     glm::vec2 getRotation();
 
@@ -27,6 +38,8 @@ public:
     void move(float dx, float dy, float dz);
 
     void setPosition(float x, float y, float z);
+
+    void jump();
 
     void tick(ControlPad *pad);
 };

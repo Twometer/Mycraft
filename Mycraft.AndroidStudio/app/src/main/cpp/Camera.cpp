@@ -22,7 +22,7 @@ Camera::Camera(Player *player, Renderer *renderer) {
 mat4 Camera::compute() {
     Player player = *this->player;
     vec2 rotation = player.getRotation();
-    vec3 position = player.getEyePosition();
+    vec3 position = player.getEyePositionInterpolated();
     float yaw = radians(rotation.x);
     float pitch = radians(rotation.y);
 

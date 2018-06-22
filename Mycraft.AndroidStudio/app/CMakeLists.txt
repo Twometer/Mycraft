@@ -29,6 +29,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/world/World.cpp
              src/main/cpp/world/Chunk.cpp
              src/main/cpp/world/Section.cpp
+             src/main/cpp/world/AABB.cpp
              src/main/cpp/render/SectionRenderer.cpp
              src/main/cpp/render/AsyncSectionQueue.cpp
              src/main/cpp/block/Block.cpp
