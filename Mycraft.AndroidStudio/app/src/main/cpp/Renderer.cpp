@@ -12,6 +12,7 @@
 #include "net/PacketHandler.h"
 #include "TickEngine.h"
 #include "gui/FontRenderer.h"
+#include "util/jtime.h"
 #include <sstream>
 
 Player *player;
@@ -143,9 +144,9 @@ void Renderer::drawFrame() {
     renderer.finish();
 
 
-    long curTime = clock();
+    long curTime = static_cast<long>(time_util::get_time_nanos());
     frames++;
-    if(curTime - lastReset > 1000000){
+    if(curTime - lastReset > 1000000000){
         lastReset = curTime;
         framesPerSecond = frames;
         frames = 0;

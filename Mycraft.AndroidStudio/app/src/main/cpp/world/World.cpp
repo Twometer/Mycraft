@@ -6,7 +6,7 @@
 #include "World.h"
 #include "../Renderer.h"
 
-#define RENDER_DISTANCE 8
+#define RENDER_DISTANCE 10
 
 World::World() {
     chunkArray = new Chunk *[1024];
