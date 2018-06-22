@@ -24,7 +24,7 @@ extern "C" JNIEXPORT void JNICALL
 Java_de_twometer_mycraft_interop_NativeLib_onLoginCompleted(JNIEnv *env, jobject instance) {
 
     LOGD("Completed login sequence");
-
+    Renderer::getPlayer()->startPhysics();
 }
 
 extern "C"
@@ -72,7 +72,7 @@ Java_de_twometer_mycraft_interop_NativeLib_uploadFontWidths(JNIEnv *env, jobject
                                                             jbyteArray widths_) {
     jbyte *widths = env->GetByteArrayElements(widths_, NULL);
 
-    FontRenderer::setFontWidths((unsigned char*)(widths));
+    FontRenderer::setFontWidths((unsigned char *) (widths));
 
     env->ReleaseByteArrayElements(widths_, widths, 0);
 }

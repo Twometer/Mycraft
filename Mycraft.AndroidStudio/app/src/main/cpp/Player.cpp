@@ -71,6 +71,7 @@ void Player::setPosition(float x, float y, float z) {
     posZ = z;
 }
 
+int physicsEnabledTicks = 0;
 
 void Player::tick(ControlPad *pad) {
 
@@ -83,9 +84,13 @@ void Player::tick(ControlPad *pad) {
 
     move(motionX, motionY, motionZ);
 
-    motionX *= SLIPPERINESS;
-    motionY -= GRAVITY;
-    motionZ *= SLIPPERINESS;
+    if (doPhysics && physicsEnabledTicks <= 5) physicsEnabledTicks++;
+
+    if (doPhysics && physicsEnabledTicks > 5) {
+        motionX *= SLIPPERINESS;
+        motionY -= GRAVITY;
+        motionZ *= SLIPPERINESS;
+    }
 
     //// INPUT ////
     float yawRad = glm::radians(yaw);
@@ -134,4 +139,10 @@ void Player::jump() {
         jumpTicks = 4;
         motionY = 0.42f;
     }
+}
+
+void Player::startPhysics() {
+
+    doPhysics = true;
+
 }

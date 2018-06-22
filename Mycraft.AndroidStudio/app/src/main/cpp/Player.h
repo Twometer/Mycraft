@@ -26,6 +26,7 @@ private:
     float pitch;
     int jumpTicks;
     bool onGround;
+    bool doPhysics;
 public:
     glm::vec3 getPosition();
 
@@ -40,6 +41,8 @@ public:
     void setPosition(float x, float y, float z);
 
     void jump();
+
+    void startPhysics();
 
     void tick(ControlPad *pad);
 };
