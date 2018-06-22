@@ -16,6 +16,7 @@
 
 #include <vector>
 #include <GLES3/gl3.h>
+#include "GuiRenderer.h"
 
 struct CONTROL {
     int identifier;
@@ -40,7 +41,7 @@ private:
 
     std::vector<CONTROL*> controls;
 
-    void drawRect(GLfloat x, GLfloat y, int color);
+    void drawRect(GuiRenderer *guiRenderer, GLfloat x, GLfloat y, int color);
 
     GLfloat normalize(GLfloat x);
 
@@ -51,7 +52,7 @@ public:
 
     void handleTouch(bool down, float x, float y);
 
-    void render();
+    void render(GuiRenderer *guiRenderer);
 };
 
 

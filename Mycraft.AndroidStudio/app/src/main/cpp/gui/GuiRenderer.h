@@ -16,7 +16,10 @@ struct COLORDATA {
     int a;
 
     COLORDATA() {
-
+        this->r = 255;
+        this->g = 255;
+        this->b = 255;
+        this->a = 255;
     }
 
     COLORDATA(int r, int g, int b, int a) {
@@ -27,7 +30,28 @@ struct COLORDATA {
     }
 };
 
-class VboBuilder {
+struct TEXDATA {
+    float u0;
+    float v0;
+    float u1;
+    float v1;
+
+    TEXDATA() {
+        u0 = 0;
+        v0 = 0;
+        u1 = 1;
+        v1 = 1;
+    }
+
+    TEXDATA(float u0, float v0, float u1, float v1) {
+        this->u0 = u0;
+        this->v0 = v0;
+        this->u1 = u1;
+        this->v1 = v1;
+    }
+};
+
+class GuiRenderer {
 
 private:
     GLuint vao = 0;
@@ -42,9 +66,9 @@ private:
     bool hasColor;
     bool hasTexture;
 public:
-    VboBuilder(int dimen);
+    GuiRenderer(int dimen);
 
-    ~VboBuilder();
+    ~GuiRenderer();
 
     void vertex3(GLfloat x, GLfloat y, GLfloat z);
 
@@ -52,7 +76,8 @@ public:
 
     void texture2(GLfloat u, GLfloat v);
 
-    void drawRect(GLfloat x, GLfloat y, GLfloat width, GLfloat height, COLORDATA color, bool useTextures);
+    void drawRect(GLfloat x, GLfloat y, GLfloat width, GLfloat height, COLORDATA color,
+                  TEXDATA useTextures);
 
     void drawRect(GLfloat x, GLfloat y, GLfloat width, GLfloat height, COLORDATA color);
 

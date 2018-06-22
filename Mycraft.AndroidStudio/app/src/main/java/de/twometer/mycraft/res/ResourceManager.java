@@ -85,4 +85,8 @@ public class ResourceManager {
     public File getAssetsDir() {
         return assetsDir;
     }
+
+    public String getAssetFile(String assetFile) {
+        return new File(getAssetsDir(), assetFile).getAbsolutePath();
+    }
 }

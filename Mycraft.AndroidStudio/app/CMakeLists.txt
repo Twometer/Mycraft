@@ -20,12 +20,12 @@ add_library( # Sets the name of the library.
 
              # Provides a relative path to your source file(s).
              src/main/cpp/native-lib.cpp
-             src/main/cpp/VboBuilder.cpp
              src/main/cpp/Loader.cpp
              src/main/cpp/Renderer.cpp
              src/main/cpp/Player.cpp
              src/main/cpp/Camera.cpp
              src/main/cpp/Frustum.cpp
+             src/main/cpp/TickEngine.cpp
              src/main/cpp/world/World.cpp
              src/main/cpp/world/Chunk.cpp
              src/main/cpp/world/Section.cpp
@@ -34,6 +34,8 @@ add_library( # Sets the name of the library.
              src/main/cpp/block/Block.cpp
              src/main/cpp/block/BlockRegistry.cpp
              src/main/cpp/gui/ControlPad.cpp
+             src/main/cpp/gui/GuiRenderer.cpp
+             src/main/cpp/gui/FontRenderer.cpp
              src/main/cpp/net/PacketHandler.cpp
              src/main/cpp/net/PacketBuffer.cpp
              src/main/cpp/lodepng/lodepng.cpp)

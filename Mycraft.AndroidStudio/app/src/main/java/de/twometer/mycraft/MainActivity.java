@@ -1,6 +1,7 @@
 package de.twometer.mycraft;
 
 import android.annotation.SuppressLint;
+import android.graphics.BitmapFactory;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import javax.microedition.khronos.opengles.GL10;
 import de.twometer.mycraft.interop.NativeLib;
 import de.twometer.mycraft.net.Listener;
 import de.twometer.mycraft.net.McClient;
+import de.twometer.mycraft.res.FontProcessor;
 import de.twometer.mycraft.res.ResourceManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         }
         nativeLib = new NativeLib();
         nativeLib.setAssetsFolder(resourceManager.getAssetsDir().getAbsolutePath());
+        nativeLib.uploadFontWidths(FontProcessor.measureFont(BitmapFactory.decodeFile(resourceManager.getAssetFile("textures/ascii.png"))));
         glSurfaceView = new GLSurfaceView(this);
         glSurfaceView.setEGLContextClientVersion(3);
         glSurfaceView.setRenderer(new GLSurfaceView.Renderer() {

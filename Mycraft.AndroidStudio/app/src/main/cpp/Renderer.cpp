@@ -3,28 +3,35 @@
 //
 
 #include "Renderer.h"
-#include "VboBuilder.h"
+#include "gui/GuiRenderer.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "render/AsyncSectionQueue.h"
 #include "block/BlockRegistry.h"
 #include "gui/ControlPad.h"
-#include "Logger.h"
 #include "glm/gtc/random.hpp"
 #include "net/PacketHandler.h"
+#include "TickEngine.h"
+#include "gui/FontRenderer.h"
+#include <sstream>
 
 Player *player;
 Camera *camera;
 World *world;
 ControlPad *controlPad;
 PacketHandler *packetHandler;
+TickEngine *tickEngine;
 
 int viewport_width;
 int viewport_height;
 
 GLuint terrainTexture;
+GLuint fontTexture;
 
 GLuint guiShader;
 GLint guiShader_loc_projectionMatrix;
+
+GLuint texturedGuiShader;
+GLint texturedGuiShader_loc_projectionMatrix;
 
 GLuint terrainShader;
 GLint terrainShader_loc_mvpMatrix;
@@ -32,6 +39,23 @@ GLint terrainShader_loc_mvpMatrix;
 GLuint terrainVao;
 
 glm::mat4 ortho_projection;
+
+int frames;
+int framesPerSecond;
+long lastReset;
+
+// TODO:
+// - Add texture loader to load texturepacks from ZIP file
+// - Add GUI for connecting etc.
+// - Add textures for the buttons
+
+template <typename T>
+std::string NumberToString ( T Number )
+{
+    std::ostringstream ss;
+    ss << Number;
+    return ss.str();
+}
 
 void Renderer::initialize(Loader loader) {
     glClearColor(0.537f, 0.808f, 0.98f, 1.0f);
@@ -42,14 +66,20 @@ void Renderer::initialize(Loader loader) {
     camera = new Camera(player, this);
     world = new World();
     packetHandler = new PacketHandler();
+    tickEngine = new TickEngine();
 
     AsyncSectionQueue::initialize();
     BlockRegistry::initialize();
 
     terrainTexture = loader.loadTexture("atlas_blocks.png", Interpolation::NEAREST);
+    fontTexture = loader.loadTexture("ascii.png", Interpolation::NEAREST);
 
     guiShader = loader.loadShader("gui");
     guiShader_loc_projectionMatrix = glGetUniformLocation(guiShader, "projectionMatrix");
+
+    texturedGuiShader = loader.loadShader("texturedgui");
+    texturedGuiShader_loc_projectionMatrix = glGetUniformLocation(texturedGuiShader,
+                                                                  "projectionMatrix");
 
     terrainShader = loader.loadShader("terrain");
     terrainShader_loc_mvpMatrix = glGetUniformLocation(terrainShader, "mvpMatrix");
@@ -98,10 +128,30 @@ void Renderer::drawFrame() {
     glUseProgram(guiShader);
     glUniformMatrix4fv(guiShader_loc_projectionMatrix, 1, GL_FALSE, &ortho_projection[0][0]);
 
-    // Control pad
-    controlPad->render();
+    GuiRenderer *guiRenderer = new GuiRenderer(2);
+    controlPad->render(guiRenderer);
+    guiRenderer->buildAndRender();
 
-    player->tick(controlPad);
+    glBindTexture(GL_TEXTURE_2D, fontTexture);
+    glUseProgram(texturedGuiShader);
+    glUniformMatrix4fv(texturedGuiShader_loc_projectionMatrix, 1, GL_FALSE,
+                       &ortho_projection[0][0]);
+
+    FontRenderer renderer;
+    renderer.drawStringWithShadow(-0.9f, 0.9f, "Mycraft v0.5-beta", COLORDATA());
+    renderer.drawStringWithShadow(-0.9f, 0.8f, (NumberToString(framesPerSecond) + " fps").c_str(), COLORDATA());
+    renderer.finish();
+
+
+    long curTime = clock();
+    frames++;
+    if(curTime - lastReset > 1000000){
+        lastReset = curTime;
+        framesPerSecond = frames;
+        frames = 0;
+    }
+
+    handleTimer();
 }
 
 glm::vec2 Renderer::getSize() {
@@ -115,6 +165,13 @@ void Renderer::rotatePlayer(float dx, float dy) {
 
 void Renderer::onPadTouch(bool down, float x, float y) {
     controlPad->handleTouch(down, x, y);
+}
+
+void Renderer::handleTimer() {
+    tickEngine->update();
+    for (int i = 0; i < tickEngine->ticks; i++) {
+        player->tick(controlPad);
+    }
 }
 
 World *Renderer::getWorld() {
@@ -132,4 +189,9 @@ Player *Renderer::getPlayer() {
 PacketHandler *Renderer::getPacketHandler() {
     return packetHandler;
 }
+
+TickEngine *Renderer::getTickEngine() {
+    return tickEngine;
+}
+
 

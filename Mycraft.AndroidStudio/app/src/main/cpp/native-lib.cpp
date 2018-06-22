@@ -2,10 +2,11 @@
 #include <string>
 #include <GLES3/gl3.h>
 
-#include "VboBuilder.h"
+#include "gui/GuiRenderer.h"
 #include "Loader.h"
 #include "Renderer.h"
 #include "Logger.h"
+#include "gui/FontRenderer.h"
 
 Loader loader;
 Renderer renderer;
@@ -65,4 +66,13 @@ Java_de_twometer_mycraft_interop_NativeLib_onPadTouch(JNIEnv *env, jobject insta
 
     renderer.onPadTouch(down, x, y);
 
+}extern "C"
+JNIEXPORT void JNICALL
+Java_de_twometer_mycraft_interop_NativeLib_uploadFontWidths(JNIEnv *env, jobject instance,
+                                                            jbyteArray widths_) {
+    jbyte *widths = env->GetByteArrayElements(widths_, NULL);
+
+    FontRenderer::setFontWidths((unsigned char*)(widths));
+
+    env->ReleaseByteArrayElements(widths_, widths, 0);
 }

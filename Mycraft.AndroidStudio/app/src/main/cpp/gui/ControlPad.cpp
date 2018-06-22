@@ -1,7 +1,6 @@
 //
 // Created by twome on 18/06/2018.
 //
-#include "../VboBuilder.h"
 #include "ControlPad.h"
 
 
@@ -9,11 +8,9 @@ GLfloat ControlPad::normalize(GLfloat x) {
     return x * (viewport_width / viewport_height);
 }
 
-void ControlPad::drawRect(GLfloat x, GLfloat y, int color) {
-    VboBuilder vboBuilder = VboBuilder(2);
-    vboBuilder.drawRect(x, y, CONTROL_SIZE, normalize(CONTROL_SIZE),
+void ControlPad::drawRect(GuiRenderer *guiRenderer, GLfloat x, GLfloat y, int color) {
+    guiRenderer->drawRect(x, y, CONTROL_SIZE, normalize(CONTROL_SIZE),
                         COLORDATA(color, color, color, 255));
-    vboBuilder.buildAndRender();
 }
 
 void ControlPad::build(int viewport_width, int viewport_height) {
@@ -36,10 +33,10 @@ void ControlPad::build(int viewport_width, int viewport_height) {
                         -1.f + normalize(2 * CONTROL_PADDING + CONTROL_SIZE)));
 }
 
-void ControlPad::render() {
+void ControlPad::render(GuiRenderer *guiRenderer) {
     for (unsigned long i = 0; i < controls.size(); i++) {
         CONTROL ctrl = *controls.at(i);
-        drawRect(ctrl.x, ctrl.y, ctrl.color);
+        drawRect(guiRenderer, ctrl.x, ctrl.y, ctrl.color);
     }
 }
 

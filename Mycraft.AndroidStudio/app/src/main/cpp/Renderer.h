@@ -10,9 +10,12 @@
 #include "world/World.h"
 #include "Camera.h"
 #include "net/PacketHandler.h"
+#include "TickEngine.h"
 
 class Camera;
 class Renderer {
+private:
+    void handleTimer();
 public:
     void initialize(Loader loader);
 
@@ -20,17 +23,19 @@ public:
 
     void drawFrame();
 
-    glm::vec2 getSize();
-
     void rotatePlayer(float dx, float dy);
 
     void onPadTouch(bool down, float x, float y);
 
     PacketHandler* getPacketHandler();
 
+    static glm::vec2 getSize();
+
     static World* getWorld();
 
     static Player* getPlayer();
+
+    static TickEngine* getTickEngine();
 
     static bool isCubeInFrustum(float x, float y, float z, float size);
 };
