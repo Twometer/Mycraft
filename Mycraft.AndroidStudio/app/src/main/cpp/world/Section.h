@@ -42,6 +42,8 @@ public:
     void setState(int state);
 
     bool isInFrustum();
+
+    void reload();
 };
 
 

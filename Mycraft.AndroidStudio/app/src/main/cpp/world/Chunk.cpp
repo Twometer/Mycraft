@@ -64,3 +64,11 @@ int Chunk::loadFromPacket(unsigned char *data, unsigned short bitmask) {
     }
     return idx;
 }
+
+void Chunk::reload() {
+    for(int i = 0; i < 16; i++){
+        Section* sec = sections[i];
+        if(sec != NULL)
+            sec->reload();
+    }
+}

@@ -14,12 +14,7 @@
 
 SectionRenderer::SectionRenderer(Section *section) {
     this->section = section;
-    this->vertices = new GLfloat[120000]; // Three entries per vertex
-    this->verticesAlloc = 0;
-    this->colors = new GLfloat[40000]; // Three entries per vertex
-    this->colorsAlloc = 0;
-    this->textureCoords = new GLfloat[90000]; // Two entries per vertex
-    this->textureCoordsAlloc = 0;
+    reinitialize();
 }
 
 bool canOcclude(int x, int y, int z) {
@@ -163,6 +158,9 @@ void SectionRenderer::uploadData() {
     delete[] vertices;
     delete[] colors;
     delete[] textureCoords;
+    vertices = NULL;
+    colors = NULL;
+    textureCoords = NULL;
 }
 
 void SectionRenderer::render() {
@@ -222,4 +220,13 @@ unsigned char SectionRenderer::getBlock(int x, int y, int z, int absX, int absY,
     if (BlockRegistry::isTransparent(blockId))
         return 0;
     else return blockId;
+}
+
+void SectionRenderer::reinitialize() {
+    this->vertices = new GLfloat[120000]; // Three entries per vertex
+    this->verticesAlloc = 0;
+    this->colors = new GLfloat[40000]; // One entry per vertex
+    this->colorsAlloc = 0;
+    this->textureCoords = new GLfloat[90000]; // Two entries per vertex
+    this->textureCoordsAlloc = 0;
 }

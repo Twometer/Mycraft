@@ -45,14 +45,15 @@ int frames;
 int framesPerSecond;
 long lastReset;
 
+bool initialized = false;
+
 // TODO:
 // - Add texture loader to load texturepacks from ZIP file
 // - Add GUI for connecting etc.
 // - Add textures for the buttons
 
-template <typename T>
-std::string NumberToString ( T Number )
-{
+template<typename T>
+std::string num_to_string(T Number) {
     std::ostringstream ss;
     ss << Number;
     return ss.str();
@@ -62,15 +63,20 @@ void Renderer::initialize(Loader loader) {
     glClearColor(0.537f, 0.808f, 0.98f, 1.0f);
     glViewport(0, 0, viewport_width, viewport_height);
 
-    controlPad = new ControlPad();
-    player = new Player();
-    camera = new Camera(player, this);
-    world = new World();
-    packetHandler = new PacketHandler();
-    tickEngine = new TickEngine();
+    if (!initialized) {
+        controlPad = new ControlPad();
+        player = new Player();
+        camera = new Camera(player, this);
+        world = new World();
+        packetHandler = new PacketHandler();
+        tickEngine = new TickEngine();
 
-    AsyncSectionQueue::initialize();
-    BlockRegistry::initialize();
+        AsyncSectionQueue::initialize();
+        BlockRegistry::initialize();
+        initialized = true;
+    } else {
+        world->reload();
+    }
 
     terrainTexture = loader.loadTexture("atlas_blocks.png", Interpolation::NEAREST);
     fontTexture = loader.loadTexture("ascii.png", Interpolation::NEAREST);
@@ -140,13 +146,14 @@ void Renderer::drawFrame() {
 
     FontRenderer renderer;
     renderer.drawStringWithShadow(-0.9f, 0.9f, "Mycraft v0.5-beta", COLORDATA());
-    renderer.drawStringWithShadow(-0.9f, 0.8f, (NumberToString(framesPerSecond) + " fps").c_str(), COLORDATA());
+    renderer.drawStringWithShadow(-0.9f, 0.8f, (num_to_string(framesPerSecond) + " fps").c_str(),
+                                  COLORDATA());
     renderer.finish();
 
 
     long curTime = static_cast<long>(time_util::get_time_nanos());
     frames++;
-    if(curTime - lastReset > 1000000000){
+    if (curTime - lastReset > 1000000000) {
         lastReset = curTime;
         framesPerSecond = frames;
         frames = 0;

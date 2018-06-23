@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
     private int[] controlPadBorder;
 
+    private boolean isConnected;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,34 +154,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startNetworkThread() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                McClient client = new McClient();
-                try {
-                    client.login("DevClient", "192.168.2.102", 25565);
-                } catch (IOException e) {
-                    e.printStackTrace();
+        if (!isConnected) {
+            isConnected = true;
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    McClient client = new McClient();
+                    try {
+                        client.login("DevClient", "192.168.2.102", 25565);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    client.setListener(new Listener() {
+                        @Override
+                        public void onPacket(int id, byte[] packet) {
+                            nativeLib.onPacket(id, packet);
+                        }
+
+                        @Override
+                        public void onLoginStatusChanged(final String status) {
+
+                        }
+
+                        @Override
+                        public void onLoginCompleted() {
+                            nativeLib.onLoginCompleted();
+                        }
+                    });
                 }
-                client.setListener(new Listener() {
-                    @Override
-                    public void onPacket(int id, byte[] packet) {
-                        nativeLib.onPacket(id, packet);
-                    }
-
-                    @Override
-                    public void onLoginStatusChanged(final String status) {
-
-                    }
-
-                    @Override
-                    public void onLoginCompleted() {
-                        nativeLib.onLoginCompleted();
-                    }
-                });
-            }
-        });
-        thread.start();
+            });
+            thread.start();
+        }
     }
 
 }

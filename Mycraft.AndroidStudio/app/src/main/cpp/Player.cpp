@@ -59,6 +59,9 @@ void Player::move(float dx, float dy, float dz) {
     if (yaOrg != dy) motionY = 0.0f;
     if (zaOrg != dz) motionZ = 0.0f;
 
+    if(xaOrg != dx || zaOrg != dz)
+        jump();
+
     posX = (playerBox.p0.x + playerBox.p1.x) / 2;
     posY = playerBox.p0.y;
     posZ = (playerBox.p0.z + playerBox.p1.z) / 2;
@@ -84,9 +87,9 @@ void Player::tick(ControlPad *pad) {
 
     move(motionX, motionY, motionZ);
 
-    if (doPhysics && physicsEnabledTicks <= 5) physicsEnabledTicks++;
+    if (doPhysics && physicsEnabledTicks <= PHYSICS_DELAY) physicsEnabledTicks++;
 
-    if (doPhysics && physicsEnabledTicks > 5) {
+    if (doPhysics && physicsEnabledTicks > PHYSICS_DELAY) {
         motionX *= SLIPPERINESS;
         motionY -= GRAVITY;
         motionZ *= SLIPPERINESS;

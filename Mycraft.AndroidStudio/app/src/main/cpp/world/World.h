@@ -28,6 +28,8 @@ public:
 
     std::vector<AABB> getCubes(int x, int y, int z, int r);
 
+    void reload();
+
     World();
 };
 

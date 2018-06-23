@@ -24,6 +24,8 @@ public:
     unsigned char getBlock(int x, int y, int z);
 
     int loadFromPacket(unsigned char* data, unsigned short bitmask);
+
+    void reload();
 };
 
 

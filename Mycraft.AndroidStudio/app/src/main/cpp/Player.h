@@ -8,8 +8,9 @@
 #include "glm/glm.hpp"
 #include "gui/ControlPad.h"
 
-#define GRAVITY 0.08f
+#define GRAVITY 0.07f
 #define SLIPPERINESS 0.61f
+#define PHYSICS_DELAY 10
 
 class Player {
 private:

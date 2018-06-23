@@ -22,14 +22,22 @@ void AsyncSectionQueue::initialize() {
     }
 }
 
+void sleep_cpusave() {
+    nanosleep((const struct timespec[]) {{0, 20000000L}}, NULL);
+}
+
 void *AsyncSectionQueue::work(void *) {
     while (running) {
         if (sectionQueue.size() > 0) {
             Section *section = sectionQueue.front();
             sectionQueue.pop();
+            if (section == NULL) {
+                sleep_cpusave();
+                continue;
+            }
             section->sectionRenderer->buildData();
         } else {
-            nanosleep((const struct timespec[]) {{0, 20000000L}}, NULL);
+            sleep_cpusave();
         }
     }
     return NULL;

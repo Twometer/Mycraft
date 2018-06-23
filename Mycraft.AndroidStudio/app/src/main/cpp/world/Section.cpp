@@ -54,3 +54,10 @@ void Section::setState(int state) {
 bool Section::isInFrustum() {
     return Renderer::isCubeInFrustum(worldXCenter, worldYCenter, worldZCenter, 8);
 }
+
+void Section::reload() {
+    if (state == STATE_SHOULD_RENDER) {
+        sectionRenderer->reinitialize();
+        state = STATE_SHOULD_BUILD;
+    }
+}
