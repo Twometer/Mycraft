@@ -16,6 +16,7 @@ void ControlPad::drawRect(GuiRenderer *guiRenderer, GLfloat x, GLfloat y, int co
 void ControlPad::build(int viewport_width, int viewport_height) {
     this->viewport_width = viewport_width;
     this->viewport_height = viewport_height;
+    controls.clear();
     controls.push_back(
             new CONTROL(0, -1.f + CONTROL_SIZE + 2 * CONTROL_PADDING,
                         -1.f + normalize(CONTROL_PADDING)));

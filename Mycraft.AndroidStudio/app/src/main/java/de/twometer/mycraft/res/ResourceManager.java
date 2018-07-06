@@ -13,7 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.twometer.mycraft.MainActivity;
+import de.twometer.mycraft.GameActivity;
 
 public class ResourceManager {
 
@@ -73,7 +73,7 @@ public class ResourceManager {
 
     private void requestFilePermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            ((MainActivity) context).requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 123);
+            ((GameActivity) context).requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 123);
         }
     }
 

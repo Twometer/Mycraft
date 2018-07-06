@@ -1,6 +1,7 @@
 package de.twometer.mycraft;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -21,7 +22,10 @@ import de.twometer.mycraft.net.McClient;
 import de.twometer.mycraft.res.FontProcessor;
 import de.twometer.mycraft.res.ResourceManager;
 
-public class MainActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
+
+    public static final String EXTRA_SERVER = "mycraft.extra.server";
+    public static final String EXTRA_USERNAME = "mycraft.extra.username";
 
     private static final float CONTROL_PADDING = 0.05f / 2;
     private static final float CONTROL_SIZE = 0.15f / 2;
@@ -156,12 +160,17 @@ public class MainActivity extends AppCompatActivity {
     private void startNetworkThread() {
         if (!isConnected) {
             isConnected = true;
+
+            Intent intent = getIntent();
+            final String username = intent.getStringExtra(EXTRA_USERNAME);
+            final String server = intent.getStringExtra(EXTRA_SERVER);
+
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     McClient client = new McClient();
                     try {
-                        client.login("DevClient", "192.168.2.102", 25565);
+                        client.login(username, server, 25565);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
