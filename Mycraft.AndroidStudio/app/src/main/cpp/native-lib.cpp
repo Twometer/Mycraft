@@ -7,6 +7,7 @@
 #include "Renderer.h"
 #include "Logger.h"
 #include "gui/FontRenderer.h"
+#include "JavaCallbacks.h"
 
 Loader loader;
 Renderer renderer;
@@ -51,6 +52,7 @@ extern "C" JNIEXPORT void JNICALL
 Java_de_twometer_mycraft_interop_NativeLib_onDrawFrame(JNIEnv *env, jobject instance) {
     renderer.drawFrame();
 }
+
 extern "C"
 JNIEXPORT void JNICALL
 Java_de_twometer_mycraft_interop_NativeLib_onRotate(JNIEnv *env, jobject instance, jfloat dx,
@@ -59,6 +61,7 @@ Java_de_twometer_mycraft_interop_NativeLib_onRotate(JNIEnv *env, jobject instanc
     renderer.rotatePlayer(dx, dy);
 
 }
+
 extern "C"
 JNIEXPORT void JNICALL
 Java_de_twometer_mycraft_interop_NativeLib_onPadTouch(JNIEnv *env, jobject instance, jboolean down,
@@ -66,7 +69,9 @@ Java_de_twometer_mycraft_interop_NativeLib_onPadTouch(JNIEnv *env, jobject insta
 
     renderer.onPadTouch(down, x, y);
 
-}extern "C"
+}
+
+extern "C"
 JNIEXPORT void JNICALL
 Java_de_twometer_mycraft_interop_NativeLib_uploadFontWidths(JNIEnv *env, jobject instance,
                                                             jbyteArray widths_) {
@@ -75,4 +80,13 @@ Java_de_twometer_mycraft_interop_NativeLib_uploadFontWidths(JNIEnv *env, jobject
     FontRenderer::setFontWidths((unsigned char *) (widths));
 
     env->ReleaseByteArrayElements(widths_, widths, 0);
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_de_twometer_mycraft_interop_NativeLib_register(JNIEnv *env, jobject instance,
+                                                    jobject callback) {
+    JavaVM* vm;
+    env->GetJavaVM(&vm);
+    JavaCallbacks::registerCallback(env, vm, env->NewGlobalRef(callback));
 }

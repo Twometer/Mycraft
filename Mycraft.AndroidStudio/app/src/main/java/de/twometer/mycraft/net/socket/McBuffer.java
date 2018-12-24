@@ -52,6 +52,18 @@ public class McBuffer {
         write(ByteBuffer.allocate(2).putShort(s).array());
     }
 
+    public void writeDouble(double dbl) throws IOException {
+        write(ByteBuffer.allocate(8).putDouble(dbl).array());
+    }
+
+    public void writeFloat(float flt) throws IOException {
+        write(ByteBuffer.allocate(4).putFloat(flt).array());
+    }
+
+    public void writeBoolean(boolean b) {
+        write((byte) (b ? 1 : 0));
+    }
+
     public void writeString(String string) throws IOException {
         byte[] bt = string.getBytes();
         writeVarInt(bt.length);
@@ -63,6 +75,10 @@ public class McBuffer {
         if (inputStream.read(buf) > 0)
             return buf;
         else throw new IOException("End of buffer reached");
+    }
+
+    public void write(byte b) {
+        outputStream.write(b);
     }
 
     public void write(byte[] buf) throws IOException {

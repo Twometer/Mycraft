@@ -6,6 +6,8 @@ public class NativeLib {
         System.loadLibrary("native-lib");
     }
 
+    public native void register(JavaCallback callback);
+
     public native void onPacket(int id, byte[] packet);
 
     public native void onLoginCompleted();

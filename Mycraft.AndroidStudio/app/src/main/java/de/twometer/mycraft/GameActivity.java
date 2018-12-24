@@ -16,9 +16,13 @@ import java.io.IOException;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import de.twometer.mycraft.interop.JavaCallback;
 import de.twometer.mycraft.interop.NativeLib;
 import de.twometer.mycraft.net.Listener;
 import de.twometer.mycraft.net.McClient;
+import de.twometer.mycraft.net.packet.C04PlayerPosition;
+import de.twometer.mycraft.net.packet.C05PlayerLook;
+import de.twometer.mycraft.net.packet.C06PlayerPosLook;
 import de.twometer.mycraft.res.FontProcessor;
 import de.twometer.mycraft.res.ResourceManager;
 
@@ -33,6 +37,7 @@ public class GameActivity extends AppCompatActivity {
     private GLSurfaceView glSurfaceView;
     private NativeLib nativeLib;
     private ResourceManager resourceManager;
+    private McClient mcClient;
 
     private float previousX0;
     private float previousY0;
@@ -63,6 +68,40 @@ public class GameActivity extends AppCompatActivity {
         nativeLib = new NativeLib();
         nativeLib.setAssetsFolder(resourceManager.getAssetsDir().getAbsolutePath());
         nativeLib.uploadFontWidths(FontProcessor.measureFont(BitmapFactory.decodeFile(resourceManager.getAssetFile("textures/ascii.png"))));
+        nativeLib.register(new JavaCallback() {
+            @Override
+            public void setPosition(double x, double y, double z) {
+                if(mcClient.isLoginMode())
+                    return;
+                try {
+                    mcClient.sendPacket(new C04PlayerPosition(x, y, z, true));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void setRotation(float yaw, float pitch) {
+                if(mcClient.isLoginMode())
+                    return;
+                try {
+                    mcClient.sendPacket(new C05PlayerLook(yaw,pitch,true));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void setPosAndRot(double x, double y, double z, float yaw, float pitch) {
+                if(mcClient.isLoginMode())
+                    return;
+                try {
+                    mcClient.sendPacket(new C06PlayerPosLook(x,y,z,yaw,pitch,true));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         glSurfaceView = new GLSurfaceView(this);
         glSurfaceView.setEGLContextClientVersion(3);
         glSurfaceView.setRenderer(new GLSurfaceView.Renderer() {
@@ -168,13 +207,13 @@ public class GameActivity extends AppCompatActivity {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    McClient client = new McClient();
+                    mcClient = new McClient();
                     try {
-                        client.login(username, server, 25565);
+                        mcClient.login(username, server, 25565);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    client.setListener(new Listener() {
+                    mcClient.setListener(new Listener() {
                         @Override
                         public void onPacket(int id, byte[] packet) {
                             nativeLib.onPacket(id, packet);

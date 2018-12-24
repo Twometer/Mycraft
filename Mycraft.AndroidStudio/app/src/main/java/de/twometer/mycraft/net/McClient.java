@@ -130,6 +130,10 @@ public class McClient {
         disconnectRequested = true;
     }
 
+    public boolean isLoginMode() {
+        return isLoginMode;
+    }
+
     public void setListener(Listener listener) {
         this.listener = listener;
     }

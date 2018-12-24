@@ -46,6 +46,9 @@ public:
     void startPhysics();
 
     void tick(ControlPad *pad);
+
+private:
+    void sendToServer();
 };
 
 

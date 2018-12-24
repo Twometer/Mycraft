@@ -7,6 +7,7 @@
 #include "glm/glm.hpp"
 #include "world/AABB.h"
 #include "Renderer.h"
+#include "JavaCallbacks.h"
 
 glm::vec3 Player::getPosition() {
     return glm::vec3(posX, posY, posZ);
@@ -59,7 +60,7 @@ void Player::move(float dx, float dy, float dz) {
     if (yaOrg != dy) motionY = 0.0f;
     if (zaOrg != dz) motionZ = 0.0f;
 
-    if(xaOrg != dx || zaOrg != dz)
+    if (xaOrg != dx || zaOrg != dz)
         jump();
 
     posX = (playerBox.p0.x + playerBox.p1.x) / 2;
@@ -135,7 +136,11 @@ void Player::tick(ControlPad *pad) {
 
     if (xa != 0) motionX = xa;
     if (za != 0) motionZ = za;
+
+    //// SERVER UPDATE ////
+    sendToServer();
 }
+
 
 void Player::jump() {
     if (onGround && jumpTicks == 0) {
@@ -148,4 +153,8 @@ void Player::startPhysics() {
 
     doPhysics = true;
 
+}
+
+void Player::sendToServer() {
+    JavaCallbacks::setPosition(posX, posY, posZ);
 }

@@ -59,7 +59,8 @@ public class McSocket {
     }
 
     public void send(byte[] array) throws IOException {
-        outputStream.write(array);
+        if (outputStream != null)
+            outputStream.write(array);
     }
 
 
