@@ -13,7 +13,7 @@ Chunk::Chunk(int x, int z) {
         sections[i] = NULL;
 }
 
-void Chunk::setBlock(int x, int y, int z, unsigned char block) {
+void Chunk::setBlock(int x, int y, int z, uint8_t block) {
     int sectionIdx = y >> 4;
     Section *section = sections[sectionIdx];
     if (section == NULL) {
@@ -40,7 +40,7 @@ void Chunk::render(int pass) {
     }
 }
 
-int Chunk::loadFromPacket(unsigned char *data, unsigned short bitmask) {
+int Chunk::loadFromPacket(uint8_t *data, uint8_t bitmask) {
     int idx = 0;
     for (int i = 0; i < 16; i++) {
         if ((bitmask & (1 << i)) != 0) {
@@ -51,8 +51,7 @@ int Chunk::loadFromPacket(unsigned char *data, unsigned short bitmask) {
                 for (int y = 0; y < 16; y++) {
                     for (int z = 0; z < 16; z++) {
                         for (int x = 0; x < 16; x++) {
-                            unsigned char blockId = (unsigned char) (
-                                    ((data[idx + 1] & 255) << 8 | (data[idx] & 255)) >> 4);
+                            uint8_t blockId = (data[idx + 1] << 8 | data[idx]) >> 4;
                             if (blockId != 0)
                                 section->setBlock(x, y, z, blockId);
                             idx += 2;

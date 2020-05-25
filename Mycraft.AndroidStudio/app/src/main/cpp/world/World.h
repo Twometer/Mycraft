@@ -20,9 +20,9 @@ private:
 public:
     void render(int pass);
 
-    void setBlock(int x, int y, int z, unsigned char block);
+    void setBlock(int x, int y, int z, uint8_t block);
 
-    unsigned char getBlock(int x, int y, int z);
+    uint8_t getBlock(int x, int y, int z);
 
     void addChunk(Chunk *chunk);
 

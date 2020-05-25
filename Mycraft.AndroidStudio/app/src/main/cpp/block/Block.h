@@ -5,6 +5,7 @@
 #ifndef MYCRAFT_ANDROIDSTUDIO_BLOCK_H
 #define MYCRAFT_ANDROIDSTUDIO_BLOCK_H
 
+#include <cstdint>
 #include "Texture.h"
 
 enum RendererType {
@@ -16,12 +17,12 @@ enum RendererType {
 
 class Block {
 public:
-    char id;
+    uint8_t id;
     RendererType rendererType;
     TEXTURE topTex;
     TEXTURE sideTex;
     TEXTURE bottomTex;
 
-    Block(char id, TEXTURE topTex, TEXTURE sideTex, TEXTURE bottomTex, RendererType rendererType);
+    Block(uint8_t id, TEXTURE topTex, TEXTURE sideTex, TEXTURE bottomTex, RendererType rendererType);
 };
 #endif //MYCRAFT_ANDROIDSTUDIO_BLOCK_H

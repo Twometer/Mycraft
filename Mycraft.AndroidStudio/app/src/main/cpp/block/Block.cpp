@@ -5,7 +5,7 @@
 #include "Texture.h"
 #include "Block.h"
 
-Block::Block(char id, TEXTURE topTex, TEXTURE sideTex, TEXTURE bottomTex,
+Block::Block(uint8_t id, TEXTURE topTex, TEXTURE sideTex, TEXTURE bottomTex,
              RendererType rendererType) {
     this->id = id;
     this->topTex = topTex;

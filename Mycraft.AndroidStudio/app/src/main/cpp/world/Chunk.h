@@ -19,11 +19,11 @@ public:
 
     void render(int pass);
 
-    void setBlock(int x, int y, int z, unsigned char block);
+    void setBlock(int x, int y, int z, uint8_t block);
 
     unsigned char getBlock(int x, int y, int z);
 
-    int loadFromPacket(unsigned char* data, unsigned short bitmask);
+    int loadFromPacket(uint8_t* data, uint8_t bitmask);
 
     void reload();
 };

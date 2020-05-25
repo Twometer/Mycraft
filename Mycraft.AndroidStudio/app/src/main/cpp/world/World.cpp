@@ -31,7 +31,7 @@ void World::render(int pass) {
     }
 }
 
-void World::setBlock(int x, int y, int z, unsigned char block) {
+void World::setBlock(int x, int y, int z, uint8_t block) {
     if (y < 0 || y > 255) return;
     int chunkX = x >> 4;
     int chunkZ = z >> 4;
@@ -45,7 +45,7 @@ void World::setBlock(int x, int y, int z, unsigned char block) {
     }
 }
 
-unsigned char World::getBlock(int x, int y, int z) {
+uint8_t World::getBlock(int x, int y, int z) {
     if (y < 0 || y > 255) return 0;
     int chunkX = x >> 4;
     int chunkZ = z >> 4;

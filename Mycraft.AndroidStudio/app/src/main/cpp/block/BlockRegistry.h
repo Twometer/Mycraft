@@ -11,16 +11,16 @@
 class BlockRegistry {
 private:
     static Block** registry;
-    static void registerBlock(unsigned char id, TEXTURE topTex, TEXTURE sideTex, TEXTURE bottomTex);
-    static void registerBlock(unsigned char id, TEXTURE allTex);
-    static void registerBlock(unsigned char id, TEXTURE topTex, TEXTURE sideTex, TEXTURE bottomTex, RendererType type);
-    static void registerBlock(unsigned char id, TEXTURE allTex, RendererType type);
+    static void registerBlock(uint8_t id, TEXTURE topTex, TEXTURE sideTex, TEXTURE bottomTex);
+    static void registerBlock(uint8_t id, TEXTURE allTex);
+    static void registerBlock(uint8_t id, TEXTURE topTex, TEXTURE sideTex, TEXTURE bottomTex, RendererType type);
+    static void registerBlock(uint8_t id, TEXTURE allTex, RendererType type);
 public:
     static void initialize();
-    static bool isFluid(unsigned char id);
-    static bool isTransparent(unsigned char id);
-    static bool isPlant(unsigned char id);
-    static Block* getBlock(unsigned char id);
+    static bool isFluid(uint8_t id);
+    static bool isTransparent(uint8_t id);
+    static bool isPlant(uint8_t id);
+    static Block* getBlock(uint8_t id);
 };
 
 

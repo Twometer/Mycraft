@@ -96,28 +96,28 @@ void BlockRegistry::initialize() {
     registerBlock(172, TEXTURE(10, 5)); // Hay bale
 }
 
-bool BlockRegistry::isTransparent(unsigned char id) {
+bool BlockRegistry::isTransparent(uint8_t id) {
     if (id == 0) return false;
     Block *block = *(registry + id);
     if (block == NULL) return false;
     return block->rendererType == Transparent || block->rendererType == Plant;
 }
 
-bool BlockRegistry::isFluid(unsigned char id) {
+bool BlockRegistry::isFluid(uint8_t id) {
     if (id == 0) return false;
     Block *block = *(registry + id);
     if (block == NULL) return false;
     return block->rendererType == Fluid;
 }
 
-bool BlockRegistry::isPlant(unsigned char id) {
+bool BlockRegistry::isPlant(uint8_t id) {
     if (id == 0) return false;
     Block *block = *(registry + id);
     if (block == NULL) return false;
     return block->rendererType == Plant;
 }
 
-Block *BlockRegistry::getBlock(unsigned char id) {
+Block *BlockRegistry::getBlock(uint8_t id) {
     if (id == 0) return registry[0];
     Block *block = *(registry + id);
     if (block == NULL) return registry[0];
@@ -125,20 +125,20 @@ Block *BlockRegistry::getBlock(unsigned char id) {
 }
 
 void
-BlockRegistry::registerBlock(unsigned char id, TEXTURE topTex, TEXTURE sideTex, TEXTURE bottomTex,
+BlockRegistry::registerBlock(uint8_t id, TEXTURE topTex, TEXTURE sideTex, TEXTURE bottomTex,
                              RendererType type) {
     registry[id] = new Block(id, topTex, sideTex, bottomTex, type);
 }
 
-void BlockRegistry::registerBlock(unsigned char id, TEXTURE tex, RendererType type) {
+void BlockRegistry::registerBlock(uint8_t id, TEXTURE tex, RendererType type) {
     registry[id] = new Block(id, tex, tex, tex, type);
 }
 
 void
-BlockRegistry::registerBlock(unsigned char id, TEXTURE topTex, TEXTURE sideTex, TEXTURE bottomTex) {
+BlockRegistry::registerBlock(uint8_t id, TEXTURE topTex, TEXTURE sideTex, TEXTURE bottomTex) {
     registry[id] = new Block(id, topTex, sideTex, bottomTex, RendererType::Solid);
 }
 
-void BlockRegistry::registerBlock(unsigned char id, TEXTURE tex) {
+void BlockRegistry::registerBlock(uint8_t id, TEXTURE tex) {
     registry[id] = new Block(id, tex, tex, tex, RendererType::Solid);
 }

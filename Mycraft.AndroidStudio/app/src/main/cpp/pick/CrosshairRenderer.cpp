@@ -3,9 +3,9 @@
 //
 
 #include "CrosshairRenderer.h"
-void CrosshairRenderer::loadToVao() {
 
-    GLfloat POSITIONS[] = { 0, 16, 0, 0, 16, 16, 16, 0 };
+void CrosshairRenderer::loadToVao() {
+    GLfloat POSITIONS[] = {0, 16, 0, 0, 16, 16, 16, 0};
     const int AMOUNT = 8;
 
     glGenVertexArrays(1, &vao);
@@ -21,8 +21,7 @@ void CrosshairRenderer::loadToVao() {
     glBindVertexArray(0);
 }
 
-CrosshairRenderer::CrosshairRenderer(GLuint texture)
-{
+CrosshairRenderer::CrosshairRenderer(GLuint texture) {
     this->texture = texture;
 }
 
