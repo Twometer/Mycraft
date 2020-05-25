@@ -63,6 +63,10 @@ void SectionRenderer::buildData() {
     int absY;
     int absZ;
 
+    verticesAlloc = 0;
+    textureCoordsAlloc = 0;
+    colorsAlloc = 0;
+
     for (int z = 0; z < 16; z++) {
         absZ = z + zo;
         for (int y = 0; y < 16; y++) {
@@ -154,13 +158,6 @@ void SectionRenderer::uploadData() {
     glBindBuffer(GL_ARRAY_BUFFER, textureBuffer);
     glBufferData(GL_ARRAY_BUFFER, textureCoordsAlloc * sz, textureCoords, GL_STATIC_DRAW);
     buffers.textureBuffer = textureBuffer;
-
-    delete[] vertices;
-    delete[] colors;
-    delete[] textureCoords;
-    vertices = NULL;
-    colors = NULL;
-    textureCoords = NULL;
 }
 
 void SectionRenderer::render() {

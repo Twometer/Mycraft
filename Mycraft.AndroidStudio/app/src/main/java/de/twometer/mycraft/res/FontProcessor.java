@@ -18,13 +18,13 @@ public class FontProcessor {
                     float a = ((color >> 24) & 0xff) / 255.0f;
                     if (a != 0) {
                         if (x_ < minX) minX = x_;
-                        if (x_ > maxX) maxX = x_+1;
+                        if (x_ > maxX) maxX = x_ + 1;
                     }
                 }
                 int tempWidth = maxX - minX;
                 if (tempWidth > width) width = tempWidth;
             }
-            if(width == 0) width = 2; // Blank char
+            if (width == 0) width = 2; // Blank char
             widths[i] = (byte) (width);
         }
         return widths;

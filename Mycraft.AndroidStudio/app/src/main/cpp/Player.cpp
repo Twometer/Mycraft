@@ -78,7 +78,6 @@ void Player::setPosition(float x, float y, float z) {
 int physicsEnabledTicks = 0;
 
 void Player::tick(ControlPad *pad) {
-
     //// PHYSICS ////
     lastTickPosX = posX;
     lastTickPosY = posY;
@@ -88,7 +87,8 @@ void Player::tick(ControlPad *pad) {
 
     move(motionX, motionY, motionZ);
 
-    if (doPhysics && physicsEnabledTicks <= PHYSICS_DELAY) physicsEnabledTicks++;
+    if (doPhysics && physicsEnabledTicks <= PHYSICS_DELAY)
+        physicsEnabledTicks++;
 
     if (doPhysics && physicsEnabledTicks > PHYSICS_DELAY) {
         motionX *= SLIPPERINESS;
