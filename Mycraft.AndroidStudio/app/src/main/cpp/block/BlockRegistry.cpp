@@ -118,7 +118,7 @@ bool BlockRegistry::isPlant(unsigned char id) {
 }
 
 Block *BlockRegistry::getBlock(unsigned char id) {
-    if (id == 0) return false;
+    if (id == 0) return registry[0];
     Block *block = *(registry + id);
     if (block == NULL) return registry[0];
     return block;

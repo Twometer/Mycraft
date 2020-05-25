@@ -70,3 +70,7 @@ void FontRenderer::setFontWidths(unsigned char *fontWidths) {
     memcpy(FontRenderer::fontWidths, fontWidths, 256);
 }
 
+FontRenderer::~FontRenderer() {
+
+}
+

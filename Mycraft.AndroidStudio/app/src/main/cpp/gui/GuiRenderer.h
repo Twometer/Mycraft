@@ -8,6 +8,7 @@
 
 #include <GLES3/gl3.h>
 #include <vector>
+#include "../glm/vec2.hpp"
 
 struct COLORDATA {
     int r;
@@ -80,6 +81,8 @@ public:
                   TEXDATA useTextures);
 
     void drawRect(GLfloat x, GLfloat y, GLfloat width, GLfloat height, COLORDATA color);
+
+    void drawRectNormalized(GLfloat x, GLfloat y, GLfloat width, GLfloat height, COLORDATA color, glm::vec2 viewport);
 
     void color(int r, int g, int b, int a);
 

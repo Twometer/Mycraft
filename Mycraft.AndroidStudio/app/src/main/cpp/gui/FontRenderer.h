@@ -16,6 +16,8 @@ private:
 public:
     FontRenderer();
 
+    ~FontRenderer();
+
     void drawString(GLfloat x, GLfloat y, std::string string, COLORDATA colordata);
 
     void drawStringWithShadow(GLfloat x, GLfloat y, const char *string, COLORDATA colordata);

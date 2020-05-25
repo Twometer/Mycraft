@@ -25,7 +25,6 @@ public class FontProcessor {
                 if (tempWidth > width) width = tempWidth;
             }
             if(width == 0) width = 2; // Blank char
-            System.out.println("Character " + (char) i + " has a width of " + width + "//  " + x + " " + y);
             widths[i] = (byte) (width);
         }
         return widths;

@@ -52,7 +52,7 @@ int Chunk::loadFromPacket(unsigned char *data, unsigned short bitmask) {
                     for (int z = 0; z < 16; z++) {
                         for (int x = 0; x < 16; x++) {
                             unsigned char blockId = (unsigned char) (
-                                    ((data[idx + 1] & 255) << 8 | data[idx] & 255) >> 4);
+                                    ((data[idx + 1] & 255) << 8 | (data[idx] & 255)) >> 4);
                             if (blockId != 0)
                                 section->setBlock(x, y, z, blockId);
                             idx += 2;

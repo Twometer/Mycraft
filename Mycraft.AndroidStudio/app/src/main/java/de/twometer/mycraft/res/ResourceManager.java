@@ -6,7 +6,8 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Environment;
-import android.support.v4.content.ContextCompat;
+
+import androidx.core.content.ContextCompat;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,7 +23,7 @@ public class ResourceManager {
 
     public ResourceManager(Context context) {
         this.context = context;
-        this.assetsDir = new File(Environment.getExternalStorageDirectory(), "Mycraft");
+        this.assetsDir = new File(context.getExternalCacheDir(), "Mycraft");
     }
 
     public void prepareFirstRun() throws IOException {
@@ -59,6 +60,7 @@ public class ResourceManager {
     }
 
     private void writeToFile(InputStream inputStream, File file) throws IOException {
+        if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
         if (file.exists()) file.delete();
         file.createNewFile();
         FileOutputStream outputStream = new FileOutputStream(file);
@@ -80,7 +82,6 @@ public class ResourceManager {
     private boolean hasPermission() {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
-
 
     public File getAssetsDir() {
         return assetsDir;

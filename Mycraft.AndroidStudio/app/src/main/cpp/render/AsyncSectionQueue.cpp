@@ -31,7 +31,7 @@ void *AsyncSectionQueue::work(void *) {
         if (sectionQueue.size() > 0) {
             Section *section = sectionQueue.front();
             sectionQueue.pop();
-            if (section == NULL) {
+            if (section == NULL || section->sectionRenderer == NULL) {
                 sleep_cpusave();
                 continue;
             }

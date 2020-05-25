@@ -27,6 +27,7 @@ int viewport_height;
 
 GLuint terrainTexture;
 GLuint fontTexture;
+GLuint crosshairTexture;
 
 GLuint guiShader;
 GLint guiShader_loc_projectionMatrix;
@@ -80,6 +81,7 @@ void Renderer::initialize(Loader loader) {
 
     terrainTexture = loader.loadTexture("atlas_blocks.png", Interpolation::NEAREST);
     fontTexture = loader.loadTexture("ascii.png", Interpolation::NEAREST);
+    crosshairTexture = loader.loadTexture("crosshair.png", Interpolation::NEAREST);
 
     guiShader = loader.loadShader("gui");
     guiShader_loc_projectionMatrix = glGetUniformLocation(guiShader, "projectionMatrix");
@@ -137,6 +139,7 @@ void Renderer::drawFrame() {
 
     GuiRenderer *guiRenderer = new GuiRenderer(2);
     controlPad->render(guiRenderer);
+    guiRenderer->drawRectNormalized(-0.01f, -0.01f, 0.01f, 0.01f, COLORDATA(0, 0, 0, 0), getSize());
     guiRenderer->buildAndRender();
 
     glBindTexture(GL_TEXTURE_2D, fontTexture);
@@ -144,12 +147,13 @@ void Renderer::drawFrame() {
     glUniformMatrix4fv(texturedGuiShader_loc_projectionMatrix, 1, GL_FALSE,
                        &ortho_projection[0][0]);
 
+    delete guiRenderer;
+
     FontRenderer renderer;
-    renderer.drawStringWithShadow(-0.9f, 0.9f, "Mycraft v0.5-beta", COLORDATA());
+    renderer.drawStringWithShadow(-0.9f, 0.9f, "Mycraft v0.6.0-beta", COLORDATA());
     renderer.drawStringWithShadow(-0.9f, 0.8f, (num_to_string(framesPerSecond) + " fps").c_str(),
                                   COLORDATA());
     renderer.finish();
-
 
     long curTime = static_cast<long>(time_util::get_time_nanos());
     frames++;

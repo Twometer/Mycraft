@@ -122,3 +122,9 @@ void GuiRenderer::buildAndRender() {
     render();
 }
 
+void GuiRenderer::drawRectNormalized(GLfloat x, GLfloat y, GLfloat width, GLfloat height,
+                                     COLORDATA color, glm::vec2 viewport) {
+    float d = viewport.x / viewport.y;
+    drawRect(x, y, width, height * d, color);
+}
+
