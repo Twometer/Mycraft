@@ -77,8 +77,7 @@ public:
 
     void texture2(GLfloat u, GLfloat v);
 
-    void drawRect(GLfloat x, GLfloat y, GLfloat width, GLfloat height, COLORDATA color,
-                  TEXDATA useTextures);
+    void drawRect(GLfloat x, GLfloat y, GLfloat width, GLfloat height, COLORDATA color, TEXDATA useTextures);
 
     void drawRect(GLfloat x, GLfloat y, GLfloat width, GLfloat height, COLORDATA color);
 

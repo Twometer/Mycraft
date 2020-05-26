@@ -53,13 +53,6 @@ bool initialized = false;
 // - Add GUI for connecting etc.
 // - Add textures for the buttons
 
-template<typename T>
-std::string num_to_string(T Number) {
-    std::ostringstream ss;
-    ss << Number;
-    return ss.str();
-}
-
 void Renderer::initialize(Loader loader) {
     glClearColor(0.537f, 0.808f, 0.98f, 1.0f);
     glViewport(0, 0, viewport_width, viewport_height);
@@ -151,7 +144,7 @@ void Renderer::drawFrame() {
 
     FontRenderer renderer;
     renderer.drawStringWithShadow(-0.9f, 0.9f, "Mycraft v0.6.0-beta", COLORDATA());
-    renderer.drawStringWithShadow(-0.9f, 0.8f, (num_to_string(framesPerSecond) + " fps").c_str(),
+    renderer.drawStringWithShadow(-0.9f, 0.8f, (std::to_string(framesPerSecond) + " fps").c_str(),
                                   COLORDATA());
     renderer.finish();
 

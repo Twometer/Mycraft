@@ -6,6 +6,11 @@
 
 GuiRenderer::GuiRenderer(int dimen) {
     this->dimen = dimen;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    glGenBuffers(1, &colorBuffer);
+    glGenBuffers(1, &textureBuffer);
+    glBindVertexArray(0);
 }
 
 GuiRenderer::~GuiRenderer() {
@@ -74,28 +79,28 @@ GuiRenderer::drawRect(GLfloat x, GLfloat y, GLfloat w, GLfloat h, COLORDATA c, T
 }
 
 void GuiRenderer::build() {
-    glGenVertexArrays(1, &vao);
+
     glBindVertexArray(vao);
 
     glGenBuffers(1, &vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), &vertices.front(),
-                 GL_STATIC_DRAW);
+                 GL_DYNAMIC_DRAW);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
     if (hasColor) {
-        glGenBuffers(1, &colorBuffer);
+
         glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * colors.size(), &colors.front(),
-                     GL_STATIC_DRAW);
+                     GL_DYNAMIC_DRAW);
         glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
     if (hasTexture) {
-        glGenBuffers(1, &textureBuffer);
+
         glBindBuffer(GL_ARRAY_BUFFER, textureBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * texVertices.size(), &texVertices.front(),
-                     GL_STATIC_DRAW);
+                     GL_DYNAMIC_DRAW);
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
