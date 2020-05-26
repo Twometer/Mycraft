@@ -89,4 +89,9 @@ Java_de_twometer_mycraft_interop_NativeLib_register(JNIEnv *env, jobject instanc
     JavaVM* vm;
     env->GetJavaVM(&vm);
     JavaCallbacks::registerCallback(env, vm, env->NewGlobalRef(callback));
+}extern "C"
+JNIEXPORT void JNICALL
+Java_de_twometer_mycraft_interop_NativeLib_onTouch(JNIEnv *env, jobject thiz, jboolean down,
+                                                   jfloat x, jfloat y) {
+    renderer.onTouch(down, x, y);
 }

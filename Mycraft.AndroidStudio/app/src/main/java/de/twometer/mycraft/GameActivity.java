@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 
@@ -71,7 +71,7 @@ public class GameActivity extends AppCompatActivity {
         nativeLib.register(new JavaCallback() {
             @Override
             public void setPosition(double x, double y, double z) {
-                if(mcClient.isLoginMode())
+                if (mcClient.isLoginMode())
                     return;
                 try {
                     mcClient.sendPacket(new C04PlayerPosition(x, y, z, true));
@@ -82,10 +82,10 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void setRotation(float yaw, float pitch) {
-                if(mcClient.isLoginMode())
+                if (mcClient.isLoginMode())
                     return;
                 try {
-                    mcClient.sendPacket(new C05PlayerLook(yaw,pitch,true));
+                    mcClient.sendPacket(new C05PlayerLook(yaw, pitch, true));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -93,10 +93,10 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void setPosAndRot(double x, double y, double z, float yaw, float pitch) {
-                if(mcClient.isLoginMode())
+                if (mcClient.isLoginMode())
                     return;
                 try {
-                    mcClient.sendPacket(new C06PlayerPosLook(x,y,z,yaw,pitch,true));
+                    mcClient.sendPacket(new C06PlayerPosLook(x, y, z, yaw, pitch, true));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -162,6 +162,11 @@ public class GameActivity extends AppCompatActivity {
                     previousX0 = x0;
                     previousY0 = y0;
                 }
+
+                if ((action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN) && !isInPad)
+                    nativeLib.onTouch(true, x, y);
+                else if ((action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP) && !isInPad)
+                    nativeLib.onTouch(false, x, y);
 
                 if (action == MotionEvent.ACTION_MOVE) {
                     if (!isInPad0) {

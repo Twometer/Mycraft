@@ -24,6 +24,8 @@ public class NativeLib {
 
     public native void onPadTouch(boolean down, float x, float y);
 
+    public native void onTouch(boolean down, float x, float y);
+
     public native void uploadFontWidths(byte[] widths);
 
 }

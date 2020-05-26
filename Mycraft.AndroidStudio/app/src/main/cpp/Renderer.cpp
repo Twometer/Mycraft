@@ -13,6 +13,7 @@
 #include "TickEngine.h"
 #include "gui/FontRenderer.h"
 #include "util/jtime.h"
+#include "Logger.h"
 #include <sstream>
 
 Player *player;
@@ -170,6 +171,11 @@ void Renderer::rotatePlayer(float dx, float dy) {
 
 void Renderer::onPadTouch(bool down, float x, float y) {
     controlPad->handleTouch(down, x, y);
+}
+
+void Renderer::onTouch(bool down, float x, float y) {
+    if (!down)
+        LOGD("Placing a block now"); // TODO implement block placing/breaking
 }
 
 void Renderer::handleTimer() {

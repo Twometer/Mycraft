@@ -27,6 +27,8 @@ public:
 
     void onPadTouch(bool down, float x, float y);
 
+    void onTouch(bool down, float x, float y);
+
     PacketHandler* getPacketHandler();
 
     static glm::vec2 getSize();
