@@ -10,17 +10,20 @@
 
 class BlockRegistry {
 private:
-    static Block** registry;
-    static void registerBlock(uint8_t id, TEXTURE topTex, TEXTURE sideTex, TEXTURE bottomTex);
-    static void registerBlock(uint8_t id, TEXTURE allTex);
-    static void registerBlock(uint8_t id, TEXTURE topTex, TEXTURE sideTex, TEXTURE bottomTex, RendererType type);
-    static void registerBlock(uint8_t id, TEXTURE allTex, RendererType type);
+    static Block **registry;
+
+    static void registerBlock(uint8_t id, Sprite topTex, Sprite sideTex, Sprite bottomTex,
+                              RendererType type = RendererType::Solid, bool noClip = false);
+
+    static void registerBlock(uint8_t id, Sprite allTex, RendererType type = RendererType::Solid,
+                              bool noClip = false);
+
 public:
     static void initialize();
-    static bool isFluid(uint8_t id);
+
     static bool isTransparent(uint8_t id);
-    static bool isPlant(uint8_t id);
-    static Block* getBlock(uint8_t id);
+
+    static Block *getBlock(uint8_t id);
 };
 
 

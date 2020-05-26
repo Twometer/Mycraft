@@ -34,9 +34,10 @@ void Player::rotate(float dx, float dy) {
 void Player::move(float dx, float dy, float dz) {
     AABB playerBox = AABB(glm::vec3(posX - 0.33, posY, posZ - 0.33),
                           glm::vec3(posX + 0.33, posY + 1.9, posZ + 0.33));
-    std::vector<AABB> collision = Renderer::getWorld()->getCubes(
-            static_cast<int>(glm::floor(posX)), static_cast<int>(glm::floor(posY)),
-            static_cast<int>(glm::floor(posZ)), 4);
+    std::vector<AABB> collision = Renderer::getWorld()->getCubes(static_cast<int>(glm::floor(posX)),
+                                                                 static_cast<int>(glm::floor(posY)),
+                                                                 static_cast<int>(glm::floor(posZ)),
+                                                                 4);
 
     double xaOrg = dx;
     double yaOrg = dy;

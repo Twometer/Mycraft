@@ -5,7 +5,8 @@
 #ifndef MYCRAFT_ANDROIDSTUDIO_PLAYER_H
 #define MYCRAFT_ANDROIDSTUDIO_PLAYER_H
 
-#include "glm/glm.hpp"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
 #include "gui/ControlPad.h"
 
 #define GRAVITY 0.07f

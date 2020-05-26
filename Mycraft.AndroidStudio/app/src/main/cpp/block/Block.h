@@ -6,7 +6,7 @@
 #define MYCRAFT_ANDROIDSTUDIO_BLOCK_H
 
 #include <cstdint>
-#include "Texture.h"
+#include "Sprite.h"
 
 enum RendererType {
     Fluid,
@@ -19,10 +19,12 @@ class Block {
 public:
     uint8_t id;
     RendererType rendererType;
-    TEXTURE topTex;
-    TEXTURE sideTex;
-    TEXTURE bottomTex;
+    Sprite topTex;
+    Sprite sideTex;
+    Sprite bottomTex;
+    bool noClip;
 
-    Block(uint8_t id, TEXTURE topTex, TEXTURE sideTex, TEXTURE bottomTex, RendererType rendererType);
+    Block(uint8_t id, Sprite topTex, Sprite sideTex, Sprite bottomTex, RendererType rendererType,
+          bool noClip);
 };
 #endif //MYCRAFT_ANDROIDSTUDIO_BLOCK_H

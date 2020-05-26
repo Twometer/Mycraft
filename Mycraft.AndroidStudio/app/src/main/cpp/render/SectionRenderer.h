@@ -37,7 +37,7 @@ private:
                      GLfloat *colorTarget, GLfloat *textureTarget, int *verticesCounter,
                      int *textureCounter, int *colorCounter, int face);
 
-    unsigned char getBlock(int x, int y, int z, int absX, int absY, int absZ);
+    uint8_t getBlock(int x, int y, int z, int absX, int absY, int absZ);
 
 public:
     SectionRenderer(Section *section);

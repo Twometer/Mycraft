@@ -18,8 +18,8 @@ SectionRenderer::SectionRenderer(Section *section) {
 }
 
 bool canOcclude(int x, int y, int z) {
-    unsigned char blockId = Renderer::getWorld()->getBlock(x, y, z);
-    return blockId && !BlockRegistry::isPlant(blockId);
+    uint8_t blockId = Renderer::getWorld()->getBlock(x, y, z);
+    return blockId && !BlockRegistry::isTransparent(blockId);
 }
 
 float getOcclusionFactor(int x, int y, int z, int vx, int vy, int vz, int f) {
@@ -209,8 +209,8 @@ SectionRenderer::putGeometry(const GLfloat *vertices, const GLfloat *textureCoor
 
 }
 
-unsigned char SectionRenderer::getBlock(int x, int y, int z, int absX, int absY, int absZ) {
-    unsigned char blockId = 0;
+uint8_t SectionRenderer::getBlock(int x, int y, int z, int absX, int absY, int absZ) {
+    uint8_t blockId = 0;
     if (x < 0 || y < 0 || z < 0 || x > 15 || y > 15 || z > 15)
         blockId = Renderer::getWorld()->getBlock(absX, absY, absZ);
     else blockId = section->getBlock(x, y, z);
@@ -220,10 +220,11 @@ unsigned char SectionRenderer::getBlock(int x, int y, int z, int absX, int absY,
 }
 
 void SectionRenderer::reinitialize() {
-    this->vertices = new GLfloat[120000]; // Three entries per vertex
     this->verticesAlloc = 0;
-    this->colors = new GLfloat[40000]; // One entry per vertex
     this->colorsAlloc = 0;
-    this->textureCoords = new GLfloat[90000]; // Two entries per vertex
     this->textureCoordsAlloc = 0;
+
+    this->vertices = new GLfloat[120000]; // Three entries per vertex
+    this->colors = new GLfloat[40000]; // One entry per vertex
+    this->textureCoords = new GLfloat[90000]; // Two entries per vertex
 }
